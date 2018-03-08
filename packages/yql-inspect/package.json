@@ -1,0 +1,34 @@
+{
+  "name": "yql-inspect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "dn test && dn build -e prod"
+  },
+  "author": {
+    "name": "Houfeng",
+    "email": "admin@xhou.net",
+    "url": "http://houfeng.net"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/react": "^15.5.7",
+    "@types/react-dom": "^15.5.7",
+    "@types/react-monaco-editor": "^0.10.1",
+    "@types/classnames": "^2.2.3",
+    "nokit-handler-markdown": "^1.0.7"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "classnames": "^2.2.5",
+    "font-awesome": "^4.7.0",
+    "monaco-editor": "^0.10.1",
+    "mota": "^0.5.2",
+    "react": "^15.6.2",
+    "react-dock-panel": "^1.0.9",
+    "react-dom": "^15.6.2",
+    "react-monaco-editor": "^0.13.0"
+  }
+}

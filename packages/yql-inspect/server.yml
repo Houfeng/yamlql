@@ -1,0 +1,11 @@
+proxy:
+    rules: 
+      ^/api(.*): 'https://www.aliyun.com/'
+
+handlers:
+  .md$: nokit-handler-markdown
+  ^/: $./handlers/mvc
+
+mvc: 
+  routes: 
+    /yamlql: ./yamlql

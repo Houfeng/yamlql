@@ -1,0 +1,73 @@
+.yql-inspector {
+  height: 500px;
+  overflow: hidden;
+  box-shadow: 0 0 5px #ddd;
+  background: #fff;
+  .hidden {
+    visibility: hidden;
+  }
+  .visible {
+    visibility: visible;
+  }
+  @barBackground: #ededed;
+  @barFontColor: #999;
+  @borderColor: #d5d5d5;
+  @border: solid 1px @borderColor;
+  border: @border;
+  .pull-left {
+    float: left;
+  }
+  .pull-right {
+    float: right;
+  }
+  .query-panel,
+  .result-panel {
+    width: 50%;
+  }
+  .toolbar-panel {
+    border-bottom: @border;
+    background: @barBackground;
+    background: @barBackground;
+    color: @barFontColor;
+    @height: 50px;
+    height: @height;
+    line-height: @height;
+    user-select: none;
+    .run {
+      border-right: @border;
+    }
+    .docs {
+      border-left: @border;
+      &.active {
+        background: #f9f9f9;
+        height: @height + 1;
+      }
+    }
+    .run,
+    .docs {
+      width: 100px;
+      text-align: center;
+      cursor: pointer;
+      text-transform: uppercase;
+      &:hover {
+        color: #666;
+      }
+    }
+  }
+  .query-panel {
+    border-right: @border;
+    .operation-panel,
+    .variables-panel {
+      height: 50%;
+    }
+  }
+  .panel-bar {
+    border-top: @border;
+    border-bottom: @border;
+    font-size: 12px;
+    padding: 3px 5px;
+    color: @barFontColor;
+    background: @barBackground;
+    text-transform: uppercase;
+  }
+}

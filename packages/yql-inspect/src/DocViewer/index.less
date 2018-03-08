@@ -1,0 +1,33 @@
+.doc-viewer {
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  background: #fff;
+  .search-box {
+    border-bottom: solid 1px #ddd;
+    background: #f9f9f9;
+    input {
+      padding: 5px;
+      width: 100%;
+      border: solid 1px #ddd;
+      outline: none;
+      &:focus {
+        border: solid 1px #ccc;
+      }
+    }
+    .fa {
+      position: absolute;
+      right: 12px;
+      top: 9px;
+      color: #ccc;
+    }
+  }
+  .search-box,
+  .content-box {
+    padding: 5px;
+  }
+}

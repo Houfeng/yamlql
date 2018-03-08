@@ -1,0 +1,26 @@
+{
+  "name": "yamlql",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "dn test && dn build -e prod"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "debug": "^3.1.0",
+    "js-yaml": "^3.10.0",
+    "mota": "^0.4.7",
+    "ntils": "^4.0.0",
+    "require-dir": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/debug": "^0.0.30",
+    "@types/js-yaml": "^3.10.1",
+    "@types/node": "^9.4.5",
+    "@types/require-dir": "^0.3.0",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.7.1"
+  }
+}

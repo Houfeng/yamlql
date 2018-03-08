@@ -1,0 +1,7 @@
+data:
+  !users: 
+    - getUser
+    - mapping:
+        userName: name
+        userAge: age
+    
