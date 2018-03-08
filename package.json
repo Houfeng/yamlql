@@ -3,10 +3,14 @@
   "version": "0.0.0",
   "description": "",
   "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
   "scripts": {
     "test": "dn test && dn build -e prod"
   },
-  "author": "",
+  "author": {
+    "name": "Houfeng",
+    "email": "admin@xhou.net"
+  },
   "license": "MIT",
   "dependencies": {
     "debug": "^3.1.0",

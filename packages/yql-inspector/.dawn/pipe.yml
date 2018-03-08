@@ -1,0 +1,55 @@
+init:
+  - name: pkginfo
+
+files: &files
+  ./build/vs/: ./node_modules/monaco-editor/min/vs/**/*.*
+
+dev:
+  - name: clean
+  - name: copy
+    files: *files
+  - name: typescript
+  - name: webpack
+    entry: ./src/example/*.tsx
+    template: ./src/assets/development.html
+    watch: true
+  - name: server
+    port: 9005
+  - name: browser-sync
+
+build:
+  - name: clean
+  - name: copy
+    files: *files
+  - name: typescript
+  - name: webpack
+    entry:
+      inspector: ./src/index.tsx
+    template: '-'
+    env: production
+    common:
+      disabled: true
+    library: true
+    umd:
+      library: ['YQLInspector']
+      libraryTarget: 'umd'
+      umdNamedDefine: true
+  - name: webpack
+    entry: ./src/example/*.tsx
+    external: false
+    env: production
+    template: ./src/assets/production.html
+
+add:
+  - name: react-component-creator
+
+test:
+  - name: lint
+  - name: unit
+
+publish:
+  - name: shell
+    script:
+      - dn test
+      - dn build
+      - npm pu

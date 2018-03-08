@@ -4,5 +4,6 @@ import Inspector from '../index';
 import './index.less';
 
 const root = document.getElementById('root');
+const yqlUrl = (window as any).YQL_URL;
 
-ReactDOM.render(<Inspector />, root);
+ReactDOM.render(<Inspector url={yqlUrl} />, root);

@@ -35,6 +35,9 @@
     user-select: none;
     .run {
       border-right: @border;
+      &:active {
+        box-shadow: 0 0 5px #ccc inset;
+      }
     }
     .docs {
       border-left: @border;
@@ -56,9 +59,11 @@
   }
   .query-panel {
     border-right: @border;
-    .operation-panel,
+    .operation-panel {
+      height: 60%;
+    }
     .variables-panel {
-      height: 50%;
+      height: 40%;
     }
   }
   .panel-bar {

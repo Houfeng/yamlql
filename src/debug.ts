@@ -8,10 +8,7 @@ const processor = new Processor({
         data: [{ id, name: '用户' + id, age: id }]
       };
     }
-  },
-  // invoke(method: string, params: any) {
-
-  // }
+  }
 });
 
 const operation = `
@@ -20,11 +17,10 @@ users:
   params: $id
   fields:
     code: code
-    list: 
-      action: __map
-      params: $parent.data
+    data: 
       fields:
         .: .
+        id: false
     `;
 const variables = { id: 123 };
 

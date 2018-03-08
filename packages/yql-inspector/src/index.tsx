@@ -9,7 +9,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import './assets/common.less';
 
 const DockPanel = require('react-dock-panel');
-const { model, binding } = require('mota');
+const { model, binding, watch } = require('mota');
 
 export interface IInspectorPorps extends IInspectorOptions {
   url?: string;
@@ -43,6 +43,11 @@ export default class Inspector extends React.Component<IInspectorPorps, any> {
     </DockPanel>;
   }
 
+  @watch((model: InspectorModel) => model.params)
+  onStateChanged() {
+    this.model.saveState();
+  }
+
   render() {
     const { result, showDocs } = this.model;
     return <DockPanel className="yql-inspector">
@@ -52,14 +57,14 @@ export default class Inspector extends React.Component<IInspectorPorps, any> {
       </DockPanel>
       <DockPanel dock="left" className="query-panel">
         <DockPanel dock="top" className="operation-panel">
-          <Editor language="yaml" data-bind="operation" />
+          <Editor language="yaml" data-bind="params.operation" />
         </DockPanel>
         <DockPanel dock="bottom" className="variables-panel">
           <DockPanel dock="top" className="panel-bar">
             Variables
           </DockPanel>
           <DockPanel dock="fill" >
-            <Editor language="json" data-bind="variables" />
+            <Editor language="json" data-bind="params.variables" />
           </DockPanel>
         </DockPanel>
       </DockPanel>

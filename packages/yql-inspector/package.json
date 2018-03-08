@@ -1,8 +1,9 @@
 {
-  "name": "yql-inspect",
+  "name": "yql-inspector",
   "version": "1.0.0",
   "description": "",
-  "main": "./lib/index.js",
+  "main": "./build/js/inspector.js",
+  "typings": "./build/index.d.ts",
   "scripts": {
     "test": "dn test && dn build -e prod"
   },

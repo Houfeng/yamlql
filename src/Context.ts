@@ -5,7 +5,7 @@ import IMap from './IMap';
 
 const debug = require('debug')('context');
 const {
-  each, isString, isObject, isArray, getByPath, setByPath, isNull
+  each, isString, isObject, isArray, getByPath, setByPath, isNull, isFunction
 } = require('ntils');
 
 export class Context {
@@ -19,12 +19,12 @@ export class Context {
     this.options = options;
   }
 
-  private isVariable(value: any): boolean {
-    return isString(value) && /^\$/.test(value as string);
+  private isVariable(val: any): boolean {
+    return isString(val) && /^\$/.test(val as string);
   }
 
-  private isOperation(value: any): boolean {
-    return isObject(value);
+  private isOperation(val: any): boolean {
+    return isObject(val);
   }
 
   private getParamsArray(params: Array<any>, variables: any): Array<any> {
@@ -48,7 +48,7 @@ export class Context {
   }
 
   private getParams(params: any, variables: any): IMap | Array<any> {
-    if (isString(params)) params = [params];
+    if (!isArray(params) && !isObject(params)) params = [params];
     if (isArray(params)) {
       return this.getParamsArray(params as Array<any>, variables);
     } else {
@@ -60,9 +60,7 @@ export class Context {
     this.invokeCount++;
     const { invokeThreshold } = this.processor;
     if (this.invokeCount > invokeThreshold) {
-      throw new Error(
-        `The maximum number of invoke cannot exceed ${invokeThreshold}`
-      );
+      throw new Error(`Invoke exceeds the maximum limit ${invokeThreshold}.`);
     }
     const { action, params, fields } = operation;
     const paramValues = this.getParams(params, variables);
@@ -70,15 +68,20 @@ export class Context {
     return fields ? this.convertResult(result, fields, variables) : result;
   }
 
-  private async convertField(
-    srcItem: any, src: any, dst: string, variables: any
-  ) {
+  //暂不允许在对象是调用函数（将来增加一个注解声明哪些可调用）
+  // src.action = isFunction(val) ? (...args: Array<any>) => {
+  //   return val.call(srcItem, ...args);
+  // } : val;
+  private async convertField(srcItem: any, src: any,
+    dstItem: any, dst: string, variables: any) {
     if (this.isVariable(src)) {
       return getByPath(variables, (src as string).slice(1));
     } else if (this.isOperation(src)) {
-      if (!src.action) src.action = dst;
-      const newVariables = Object.assign({}, variables,
-        { parent: srcItem });
+      if (!src.action) {
+        const val = getByPath(srcItem, dst);
+        src.action = isFunction(val) ? {} : val || {};
+      }
+      const newVariables = Object.assign({}, variables, { parent: srcItem });
       return this.parseOperation(src, newVariables);
     } else if (isString(src)) {
       return getByPath(srcItem, src);
@@ -87,36 +90,48 @@ export class Context {
     }
   }
 
-  private async convertItem(srcItem: any, fields: any, variables: any) {
-    if (!isObject(srcItem)) return srcItem;
-    const dstItem: any = {};
-    const pendings: Array<Promise<any>> = [];
-    each(fields, (dst: string, src: any) => {
-      if (/^~/.test(dst)) return;
-      if (isNull(src) || src === true) src = dst;
-      const pending = (async () => {
-        let value = await this.convertField(srcItem, src, dst, variables);
-        if (dst === '.') {
-          Object.assign(dstItem, value);
-        } else {
-          setByPath(dstItem, dst, value);
-        }
-      })();
-      pendings.push(pending);
-    });
-    await Promise.all(pendings);
+  private async createFieldPending(srcItem: any, src: any,
+    dstItem: any, dst: string, vars: any, ignores: Array<string>) {
+    let val = await this.convertField(srcItem, src, dstItem, dst, vars);
+    if (dst === '.' && !isObject(val)) {
+      dstItem.__value__ = val;
+    } else if (dst === '.') {
+      each(val, (key: string, value: any) => {
+        if (ignores.includes(key)) return;
+        dstItem[key] = value;
+      });
+    } else if (!ignores.includes(dst)) {
+      setByPath(dstItem, dst, val);
+    }
     return dstItem;
   }
 
-  private convertResult(srcResult: any, fields: any, variables: any) {
+  private async convertItem(srcItem: any, fields: any, vars: any) {
+    if (!isObject(srcItem)) return srcItem;
+    const dstItem: any = {};
+    const pendings: Array<Promise<any>> = [];
+    const ignores: Array<string> = [];
+    each(fields, (dst: string, src: any) => {
+      if (/^~/.test(dst)) return;
+      if (isNull(src) || src === true) src = dst;
+      if (src === false) ignores.push(dst);
+      pendings.push(this.createFieldPending(
+        srcItem, src, dstItem, dst, vars, ignores
+      ));
+    });
+    await Promise.all(pendings);
+    return '__value__' in dstItem ? dstItem.__value__ : dstItem;
+  }
+
+  private convertResult(srcResult: any, fields: any, vars: any) {
     if (!srcResult || (!isObject(srcResult) && !isArray(srcResult))) {
       return srcResult;
     }
     if (isArray(srcResult)) {
       return Promise.all((srcResult as Array<any>)
-        .map(item => this.convertItem(item, fields, variables)));
+        .map(item => this.convertItem(item, fields, vars)));
     }
-    return this.convertItem(srcResult, fields, variables);
+    return this.convertItem(srcResult, fields, vars);
   }
 
   execute() {

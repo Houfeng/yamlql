@@ -7,7 +7,7 @@ import BuiltIn from './BuiltIn';
 
 const debug = require('debug')('processor');
 const {
-  each, isString, isObject, isArray, getByPath, setByPath
+  each, isString, isObject, isArray, getByPath, setByPath, isFunction
 } = require('ntils');
 
 export default class Processor {
@@ -29,10 +29,13 @@ export default class Processor {
   }
 
   public get invokeThreshold() {
-    return this.options.invokeThreshold || 20;
+    return this.options.invokeThreshold || 100;
   }
 
-  public invoke(method: string, params: IMap | Array<any>): any {
+  public invoke(method: string | Function | any, params: IMap | Array<any>)
+    : any {
+    if (isObject(method)) return method;
+    if (isFunction(method)) return this.invokeOn(null, method, params);
     if (this.builtIn[method]) {
       return this.invokeOn(this.builtIn, method, params);
     }
@@ -41,10 +44,11 @@ export default class Processor {
     return this.invokeOn(this.root, method, params);
   }
 
-  private invokeOn(owner: any, method: string, params: IMap | Array<any>) {
-    const func: Function = owner[method];
+  private invokeOn(owner: any, method: string | Function,
+    params: IMap | Array<any>) {
+    const func: Function = isString(method) ? owner[method as string] : method;
     if (!func) throw new Error(`Cannt find '${method}'`);
-    return func.apply(null, Object.values(params));
+    return func.apply(owner, Object.values(params));
   }
 
   public async process(options: IContextOptions) {

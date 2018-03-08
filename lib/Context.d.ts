@@ -5,14 +5,15 @@ export declare class Context {
     private options;
     private invokeCount;
     constructor(processor: Processor, options: IContextOptions);
-    private isVariable(value);
-    private isOperation(value);
+    private isVariable(val);
+    private isOperation(val);
     private getParamsArray(params, variables);
     private getParamsMap(params, variables);
     private getParams(params, variables);
     private parseOperation(operation, variables);
-    private convertField(srcItem, src, dst, variables);
-    private convertItem(srcItem, fields, variables);
-    private convertResult(srcResult, fields, variables);
+    private convertField(srcItem, src, dstItem, dst, variables);
+    private createFieldPending(srcItem, src, dstItem, dst, vars, ignores);
+    private convertItem(srcItem, fields, vars);
+    private convertResult(srcResult, fields, vars);
     execute(): any;
 }
