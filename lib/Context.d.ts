@@ -6,6 +6,7 @@ export declare class Context {
     private invokeCount;
     constructor(processor: Processor, options: IContextOptions);
     private isVariable(val);
+    private trimVariable(name);
     private isOperation(val);
     private getParamsArray(params, variables);
     private getParamsMap(params, variables);

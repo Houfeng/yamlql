@@ -23,6 +23,13 @@ export class Context {
     return isString(val) && /^\$/.test(val as string);
   }
 
+  private trimVariable(name: any): string {
+    if (!name) return name;
+    var str = name as string;
+    if (/^\$\./.test(str)) return str;
+    return str.slice(1);
+  }
+
   private isOperation(val: any): boolean {
     return isObject(val);
   }
@@ -31,7 +38,7 @@ export class Context {
     if (!params) return [];
     return params.map(item => {
       if (!this.isVariable(item)) return item;
-      return getByPath(variables, (item as string).slice(1));
+      return getByPath(variables, this.trimVariable(item));
     });
   }
 
@@ -40,7 +47,7 @@ export class Context {
     const values: IMap = {};
     each(params, (name: string, value: any) => {
       if (this.isVariable(value)) {
-        values[name] = getByPath(variables, (value as string).slice(1));
+        values[name] = getByPath(variables, this.trimVariable(value));
       }
       values[name] = value;
     });
@@ -74,14 +81,17 @@ export class Context {
   // } : val;
   private async convertField(srcItem: any, src: any,
     dstItem: any, dst: string, variables: any) {
+    const newVariables = Object.assign({}, variables, { $: srcItem });
     if (this.isVariable(src)) {
-      return getByPath(variables, (src as string).slice(1));
+      return getByPath(newVariables, this.trimVariable(src));
     } else if (this.isOperation(src)) {
+      if (this.isVariable(src.action)) {
+        src.action = getByPath(newVariables, this.trimVariable(src.action));
+      }
       if (!src.action) {
         const val = getByPath(srcItem, dst);
         src.action = isFunction(val) ? {} : val || {};
       }
-      const newVariables = Object.assign({}, variables, { parent: srcItem });
       return this.parseOperation(src, newVariables);
     } else if (isString(src)) {
       return getByPath(srcItem, src);

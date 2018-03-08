@@ -47,7 +47,7 @@ export default class Processor {
   private invokeOn(owner: any, method: string | Function,
     params: IMap | Array<any>) {
     const func: Function = isString(method) ? owner[method as string] : method;
-    if (!func) throw new Error(`Cannt find '${method}'`);
+    if (!func || !func.apply) throw new Error(`Cannt find method '${method}'`);
     return func.apply(owner, Object.values(params));
   }
 
