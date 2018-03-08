@@ -19,7 +19,7 @@ const processor = new Processor({
         code: 200,
         data: (() => {
           const list = [];
-          for (let i = 0; i < 20; i++)
+          for (let i = 1; i < 5; i++)
             list.push({ userId: i, userName: '用户' + i, userAge: i })
           return list;
         })()

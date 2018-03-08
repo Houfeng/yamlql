@@ -9,7 +9,7 @@ dev:
 build:
   - name: shell
     script:
-      - tsc --locale zh-cn -d --esModuleInterop
+      - tsc -d --locale zh-cn
 
 test:
   - name: lint
