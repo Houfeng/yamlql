@@ -26,7 +26,7 @@ export class Context {
   private trimVariable(name: any): string {
     if (!name) return name;
     var str = name as string;
-    if (/^\$\./.test(str)) return str;
+    if (str.length == 1 || /^\$\./.test(str)) return str;
     return str.slice(1);
   }
 
@@ -70,8 +70,9 @@ export class Context {
       throw new Error(`Invoke exceeds the maximum limit ${invokeThreshold}.`);
     }
     const { action, params, fields } = operation;
-    const paramValues = this.getParams(params, variables);
-    const result = await this.processor.invoke(action, paramValues || {});
+    const paramValues = this.getParams(params, variables) || {};
+    const { metadata } = this.options;
+    const result = await this.processor.invoke(action, paramValues, metadata);
     return fields ? this.convertResult(result, fields, variables) : result;
   }
 

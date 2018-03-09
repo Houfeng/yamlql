@@ -25,6 +25,7 @@ export default class Editor extends React.Component<IEditorPorps, any> {
           minimap: {
             enabled: false
           },
+          folding: true,
           renderLineHighlight: 'none'
         }}
         editorDidMount={this.editorDidMount}
