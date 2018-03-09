@@ -9,7 +9,12 @@ export interface IEditorPorps {
 }
 
 export default class Editor extends React.Component<IEditorPorps, any> {
+
   monaco: MonacoEditor;
+
+  get editor() {
+    return this.monaco && this.monaco.editor;
+  }
 
   render() {
     const { language = 'yaml', readOnly, onChange, ...props } = this.props;
@@ -34,10 +39,15 @@ export default class Editor extends React.Component<IEditorPorps, any> {
   }
 
   editorDidMount = () => {
-    this.monaco.editor.getModel().updateOptions({
+    this.editor.getModel().updateOptions({
       tabSize: 2
     });
-    this.monaco.editor.layout();
+    this.editor.layout();
+  }
+
+  getSelectedText() {
+    const { editor } = this;
+    return editor.getModel().getValueInRange(editor.getSelection());
   }
 
 }

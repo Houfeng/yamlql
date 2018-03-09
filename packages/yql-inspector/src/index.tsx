@@ -19,7 +19,11 @@ export interface IInspectorPorps extends IInspectorOptions {
 @model(InspectorModel)
 @binding
 export default class Inspector extends React.Component<IInspectorPorps, any> {
+
   model: InspectorModel;
+  operation: Editor;
+  varibles: Editor;
+  result: Editor;
 
   componentDidMount() {
     (global as any).YQL_INSPECTOR = this;
@@ -35,9 +39,14 @@ export default class Inspector extends React.Component<IInspectorPorps, any> {
     </DockPanel>;
   }
 
+  execute = () => {
+    this.model.selectedText = this.operation.getSelectedText();
+    this.model.execute();
+    this.result.editor.setScrollTop(0);
+  }
+
   renderRunButton() {
-    const { execute } = this.model;
-    return <DockPanel dock="left" className="run" onClick={execute}>
+    return <DockPanel dock="left" className="run" onClick={this.execute}>
       <i className="fa fa-play"></i>
       <span> Run </span>
     </DockPanel>;
@@ -57,20 +66,23 @@ export default class Inspector extends React.Component<IInspectorPorps, any> {
       </DockPanel>
       <DockPanel dock="left" className="query-panel">
         <DockPanel dock="top" className="operation-panel">
-          <Editor language="yaml" data-bind="params.operation" />
+          <Editor ref={ref => this.operation = ref}
+            language="yaml" data-bind="params.operation" />
         </DockPanel>
         <DockPanel dock="bottom" className="variables-panel">
           <DockPanel dock="top" className="panel-bar">
             Variables
           </DockPanel>
           <DockPanel dock="fill" >
-            <Editor language="json" data-bind="params.variables" />
+            <Editor ref={ref => this.varibles = ref}
+              language="json" data-bind="params.variables" />
           </DockPanel>
         </DockPanel>
       </DockPanel>
       <DockPanel dock="right" className="result-panel">
         <DocViewer visible={showDocs} />
-        <Editor language="json" readOnly={true} value={result} />
+        <Editor ref={ref => this.result = ref}
+          language="json" readOnly={true} value={result} />
       </DockPanel>
     </DockPanel>;
   }

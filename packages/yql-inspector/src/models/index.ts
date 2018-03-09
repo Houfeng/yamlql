@@ -19,6 +19,7 @@ export class InspectorModel {
   private options: IInspectorOptions;
   public params: IInspectorParams;
   public result: string = '{}';
+  public selectedText: string;
   public showDocs: boolean = false;
   private saveStateTimer: any;
 
@@ -40,7 +41,8 @@ export class InspectorModel {
   }
 
   public execute = async () => {
-    const { operation, variables, } = this.params;
+    let { operation, variables, } = this.params;
+    if (this.selectedText) operation = this.selectedText;
     const { request, url } = this.options;
     this.showDocs = false;
     const { data = '' } = (await request(url, { operation, variables }) || {});
