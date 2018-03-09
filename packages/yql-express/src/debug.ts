@@ -2,7 +2,29 @@ import * as express from 'express';
 import yqlExpress from './index';
 
 const app = express();
-app.use('/yamlql', yqlExpress({}));
+app.use('/yamlql', yqlExpress({
+  processor: {
+    root: {
+      getUser(id: string) {
+        return {
+          code: 200,
+          data: { userId: id, userName: '用户' + id, userAge: id }
+        };
+      },
+      getUsers() {
+        return {
+          code: 200,
+          data: (() => {
+            const list = [];
+            for (let i = 1; i < 5; i++)
+              list.push({ userId: i, userName: '用户' + i, userAge: i })
+            return list;
+          })()
+        };
+      }
+    }
+  }
+}));
 
 app.listen(2000, function () {
   console.log('Example app listening on port 7000!');
