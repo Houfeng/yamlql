@@ -26,7 +26,7 @@ export default class Processor {
   }
 
   public get docs() {
-    return this.options.docs || {};
+    return this.options.docs || this.root.__docs__ || {};
   }
 
   public get invokeThreshold() {
