@@ -94,10 +94,8 @@ export class Context {
         src.action = isFunction(val) ? {} : val || {};
       }
       return this.parseOperation(src, newVariables);
-    } else if (isString(src)) {
-      return getByPath(srcItem, src);
     } else {
-      return src;
+      return getByPath(srcItem, String(src));
     }
   }
 

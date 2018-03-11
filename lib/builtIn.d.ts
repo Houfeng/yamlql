@@ -8,7 +8,7 @@ export default class BuiltIn {
     __values(obj: any): {}[];
     __find(list: Array<any>, name: string, value: any): any;
     __filter(list: Array<any>, name: string, value: any): any[];
-    __join(list: Array<string>, split: string): string;
+    __join(list: Array<string>, split: string): string | string[];
     __split(str: string, split: string): string | string[];
     __substr(str: string, start: number, length: number): string;
     __substring(str: string, start: number, end: number): string;

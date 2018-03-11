@@ -1,4 +1,4 @@
-const { isNull } = require('ntils');
+const { isNull, iArray, isString } = require('ntils');
 
 export default class BuiltIn {
 
@@ -9,21 +9,25 @@ export default class BuiltIn {
 
   public __slice(list: Array<any>, start: number, end: number) {
     if (!list) return list;
+    if (!iArray(list)) return [];
     return list.slice(start, end);
   }
 
   public __limit(list: Array<any>, skip: number, limit: number) {
     if (!list) return list;
+    if (!iArray(list)) return [];
     return list.slice(skip, skip + limit);
   }
 
   public __reverse(list: Array<any>) {
     if (!list) return list;
+    if (!iArray(list)) return [];
     return list.reverse();
   }
 
   public __concat(list: Array<any>, ...args: Array<any>) {
     if (!list) return list;
+    if (!iArray(list)) return [];
     return list.concat(list, ...args);
   }
 
@@ -36,24 +40,26 @@ export default class BuiltIn {
   }
 
   public __find(list: Array<any>, name: string, value: any) {
-    if (!list) return;
+    if (!list || !iArray(list)) return;
     return list.find(item => item === name) ||
       list.find(item => item[name] === value);
   }
 
   public __filter(list: Array<any>, name: string, value: any) {
-    if (!list) return [];
+    if (!list || !iArray(list)) return [];
     return isNull(value) ? list.filter(item => item === name)
       : list.filter(item => item[name] === value);
   }
 
   public __join(list: Array<string>, split: string) {
     if (!list) return '';
+    if (!iArray(list)) return list;
     return list.join(split);
   }
 
   public __split(str: string, split: string) {
     if (!str) return str;
+    if (!isString(str)) return [str];
     return str.split(split);
   }
 
