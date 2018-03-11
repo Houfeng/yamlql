@@ -18,4 +18,6 @@ export default class BuiltIn {
     __parse(str: string): any;
     __stringify(obj: any): string;
     __merge(...args: Array<any>): any;
+    __object(...args: Array<any>): any;
+    __array(array: any): any;
 }

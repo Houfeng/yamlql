@@ -102,4 +102,14 @@ export default class BuiltIn {
     return Object.assign({}, ...args);
   }
 
+  public __object(...args: Array<any>) {
+    return Object.assign({}, ...args);
+  }
+
+  public __array(array: any) {
+    if (!array) return array;
+    if (!('length' in array)) array.length = Object.keys(array).length;
+    return [].slice.call(array);
+  }
+
 }
