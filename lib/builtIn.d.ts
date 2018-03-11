@@ -17,4 +17,5 @@ export default class BuiltIn {
     __boolean(obj: any): boolean;
     __parse(str: string): any;
     __stringify(obj: any): string;
+    __merge(...args: Array<any>): any;
 }

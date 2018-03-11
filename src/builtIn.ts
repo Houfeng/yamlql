@@ -2,6 +2,7 @@ const { isNull } = require('ntils');
 
 export default class BuiltIn {
 
+  // map 直接返回就行，YamlQL 本身即可能 map
   public __map(arg: any) {
     return arg;
   }
@@ -89,6 +90,10 @@ export default class BuiltIn {
 
   public __stringify(obj: any) {
     return JSON.stringify(obj);
+  }
+
+  public __merge(...args: Array<any>) {
+    return Object.assign({}, ...args);
   }
 
 }
