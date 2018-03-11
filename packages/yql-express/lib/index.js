@@ -15,12 +15,14 @@ function middleware(options) {
         return jsonpCallback ? jsonpCallback + "(" + text + ")" : text;
     }
     //处理响应
-    function process(res, data, jsonpCallback) {
+    function process(res, data, next, jsonpCallback) {
         res.setHeader('Content-Type', 'application/json');
-        processor.process(data).then(function (result) {
+        return processor.process(data).then(function (result) {
             res.send(stringify(result, jsonpCallback));
+            next();
         }).catch(function (err) {
             res.send(stringify({ error: err.message }, jsonpCallback));
+            next(err);
         });
     }
     //内容解析(post)
@@ -30,25 +32,29 @@ function middleware(options) {
     router.get('/', function (req, res, next) {
         var query = req.query;
         if (query && query[jsonpCallbackName]) {
-            return process(res, req.query, query[jsonpCallbackName]);
+            return process(res, req.query, next, query[jsonpCallbackName]);
         }
         if (query && query.operation) {
-            return process(res, req.query);
+            return process(res, req.query, next);
         }
         res.send('The YamlQL service is running');
+        next();
     });
     //请求处理
     router.post('/', function (req, res, next) {
-        process(res, req.body);
+        process(res, req.body, next);
     });
     //文档服务
     router.get('/docs', function (req, res, next) {
         res.send(JSON.stringify(processor.docs));
+        next();
     });
     //探查器
     var inspectorPath = require.resolve('yql-inspector');
     var inspectorRoot = path.resolve(inspectorPath, '../../');
-    router.use('/inspector', express.static(inspectorRoot));
+    router.use('/inspector', express.static(inspectorRoot, {
+        fallthrough: false
+    }));
     return router;
 }
 exports.default = middleware;

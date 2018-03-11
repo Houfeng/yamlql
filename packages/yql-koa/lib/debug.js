@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = require("express");
+var Koa = require("koa");
 var index_1 = require("./index");
+var Router = require("koa-router");
 var options = {
     processor: {
         root: {
@@ -25,9 +26,11 @@ var options = {
         }
     }
 };
-var app = express();
-app.use('/yamlql', index_1.default(options));
-app.listen(2000, function () {
-    console.log('Example app listening on port 2000!');
+var app = new Koa();
+var router = new Router();
+router.use('/yamlql', index_1.default(options));
+app.use(router.routes());
+app.listen(2100, function () {
+    console.log('Example app listening on port 2100!');
 });
 //# sourceMappingURL=debug.js.map
