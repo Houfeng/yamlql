@@ -39,10 +39,14 @@ export default class Inspector extends React.Component<IInspectorPorps, any> {
     </DockPanel>;
   }
 
-  execute = () => {
-    this.model.selectedText = this.operation.getSelectedText();
-    this.model.execute();
-    this.result.editor.setScrollTop(0);
+  execute = async () => {
+    try {
+      this.model.selectedText = this.operation.getSelectedText();
+      await this.model.execute();
+      this.result.editor.setScrollTop(0);
+    } catch (err) {
+      alert(err);
+    }
   }
 
   renderRunButton() {
