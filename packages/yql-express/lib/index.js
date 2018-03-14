@@ -1,26 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var express = require("express");
-var bodyParser = require("body-parser");
-var path = require("path");
-var yamlql_1 = require("yamlql");
-var router = express_1.Router();
+const express_1 = require("express");
+const express = require("express");
+const bodyParser = require("body-parser");
+const path = require("path");
+const yamlql_1 = require("yamlql");
+const router = express_1.Router();
 function middleware(options) {
-    var jsonpCallbackName = options.jsonpCallbackName;
-    var processor = new yamlql_1.Processor(options.processor);
+    const { jsonpCallbackName } = options;
+    const processor = new yamlql_1.Processor(options.processor);
     //序列化
     function stringify(data, jsonpCallback) {
-        var text = JSON.stringify(data);
-        return jsonpCallback ? jsonpCallback + "(" + text + ")" : text;
+        const text = JSON.stringify(data);
+        return jsonpCallback ? `${jsonpCallback}(${text})` : text;
     }
     //处理响应
     function process(res, data, next, jsonpCallback) {
         res.setHeader('Content-Type', 'application/json');
-        return processor.process(data).then(function (result) {
+        return processor.process(data).then(result => {
             res.send(stringify(result, jsonpCallback));
             next();
-        }).catch(function (err) {
+        }).catch(err => {
             res.send(stringify({ error: err.message }, jsonpCallback));
             next(err);
         });
@@ -30,7 +30,7 @@ function middleware(options) {
     router.post('/', bodyParser.urlencoded());
     //欢迎信息
     router.get('/', function (req, res, next) {
-        var query = req.query;
+        const { query } = req;
         if (query && query[jsonpCallbackName]) {
             return process(res, req.query, next, query[jsonpCallbackName]);
         }
@@ -50,8 +50,8 @@ function middleware(options) {
         next();
     });
     //探查器
-    var inspectorPath = require.resolve('yql-inspector');
-    var inspectorRoot = path.resolve(inspectorPath, '../../');
+    const inspectorPath = require.resolve('yql-inspector');
+    const inspectorRoot = path.resolve(inspectorPath, '../../');
     router.use('/inspector', express.static(inspectorRoot, {
         fallthrough: false
     }));
