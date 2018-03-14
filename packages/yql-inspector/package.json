@@ -1,6 +1,6 @@
 {
   "name": "yql-inspector",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "",
   "main": "./build/js/inspector.js",
   "typings": "./build/index.d.ts",
