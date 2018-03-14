@@ -1,6 +1,6 @@
 {
   "name": "yql-inspector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "./build/js/inspector.js",
   "typings": "./build/index.d.ts",
@@ -14,14 +14,14 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "nokit-handler-markdown": "^1.0.7"
+  },
+  "dependencies": {
     "@types/axios": "^0.14.0",
     "@types/react": "^15.5.7",
     "@types/react-dom": "^15.5.7",
     "@types/react-monaco-editor": "^0.10.1",
     "@types/classnames": "^2.2.3",
-    "nokit-handler-markdown": "^1.0.7"
-  },
-  "dependencies": {
     "axios": "^0.18.0",
     "classnames": "^2.2.5",
     "font-awesome": "^4.7.0",
