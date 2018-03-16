@@ -1,0 +1,6 @@
+# import './test2.yql'  
+
+user: 
+  action: getUser
+  fields:
+    <<: *userFields
