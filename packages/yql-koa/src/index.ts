@@ -30,7 +30,7 @@ export default function middleware(options: IServerOptions) {
     next?: Function, jsonpCallback?: string) {
     ctx.set('Content-Type', 'application/json');
     try {
-      const result = await processor.process(data);
+      const result = await processor.process(data, ctx);
       ctx.body = stringify(result, jsonpCallback);
       next();
     }

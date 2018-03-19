@@ -18,7 +18,7 @@ function middleware(options) {
     async function process(ctx, data, next, jsonpCallback) {
         ctx.set('Content-Type', 'application/json');
         try {
-            const result = await processor.process(data);
+            const result = await processor.process(data, ctx);
             ctx.body = stringify(result, jsonpCallback);
             next();
         }

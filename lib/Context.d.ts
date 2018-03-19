@@ -19,3 +19,4 @@ export declare class Context {
     private convertResult(srcResult, fields, vars);
     execute(): any;
 }
+export default Context;

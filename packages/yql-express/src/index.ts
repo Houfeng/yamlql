@@ -13,6 +13,17 @@ export interface IServerOptions {
   processor: IProcessorOptions
 }
 
+export class Client {
+  req: Request;
+  res: Response;
+  request: Request;
+  response: Response;
+  constructor(req: Request, res: Response) {
+    this.req = this.request = req;
+    this.res = this.response = res;
+  }
+}
+
 export default function middleware(options: IServerOptions): RequestHandler {
 
   const { jsonpCallbackName } = options;
@@ -25,14 +36,14 @@ export default function middleware(options: IServerOptions): RequestHandler {
   }
 
   //处理响应
-  function process(res: Response, data: any,
+  function process(client: Client, data: any,
     next?: NextFunction, jsonpCallback?: string) {
-    res.setHeader('Content-Type', 'application/json');
-    return processor.process(data).then(result => {
-      res.send(stringify(result, jsonpCallback));
+    client.res.setHeader('Content-Type', 'application/json');
+    return processor.process(data, client).then(result => {
+      client.res.send(stringify(result, jsonpCallback));
       next();
     }).catch(err => {
-      res.send(stringify({ error: err.message }, jsonpCallback));
+      client.res.send(stringify({ error: err.message }, jsonpCallback));
       next(err);
     });
   }
@@ -45,11 +56,12 @@ export default function middleware(options: IServerOptions): RequestHandler {
   router.get('/', function (
     req: Request, res: Response, next: NextFunction) {
     const { query } = req;
+    const client = new Client(req, res);
     if (query && query[jsonpCallbackName]) {
-      return process(res, req.query, next, query[jsonpCallbackName]);
+      return process(client, req.query, next, query[jsonpCallbackName]);
     }
     if (query && query.operation) {
-      return process(res, req.query, next);
+      return process(client, req.query, next);
     }
     res.send('The YamlQL service is running');
     next();
@@ -58,7 +70,7 @@ export default function middleware(options: IServerOptions): RequestHandler {
   //请求处理
   router.post('/', function (
     req: Request, res: Response, next: NextFunction) {
-    process(res, req.body, next);
+    process(new Client(req, res), req.body, next);
   });
 
   //文档服务

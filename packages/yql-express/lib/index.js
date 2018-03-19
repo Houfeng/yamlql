@@ -6,6 +6,13 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const yamlql_1 = require("yamlql");
 const router = express_1.Router();
+class Client {
+    constructor(req, res) {
+        this.req = this.request = req;
+        this.res = this.response = res;
+    }
+}
+exports.Client = Client;
 function middleware(options) {
     const { jsonpCallbackName } = options;
     const processor = new yamlql_1.Processor(options.processor);
@@ -15,13 +22,13 @@ function middleware(options) {
         return jsonpCallback ? `${jsonpCallback}(${text})` : text;
     }
     //处理响应
-    function process(res, data, next, jsonpCallback) {
-        res.setHeader('Content-Type', 'application/json');
-        return processor.process(data).then(result => {
-            res.send(stringify(result, jsonpCallback));
+    function process(client, data, next, jsonpCallback) {
+        client.res.setHeader('Content-Type', 'application/json');
+        return processor.process(data, client).then(result => {
+            client.res.send(stringify(result, jsonpCallback));
             next();
         }).catch(err => {
-            res.send(stringify({ error: err.message }, jsonpCallback));
+            client.res.send(stringify({ error: err.message }, jsonpCallback));
             next(err);
         });
     }
@@ -31,18 +38,19 @@ function middleware(options) {
     //欢迎信息
     router.get('/', function (req, res, next) {
         const { query } = req;
+        const client = new Client(req, res);
         if (query && query[jsonpCallbackName]) {
-            return process(res, req.query, next, query[jsonpCallbackName]);
+            return process(client, req.query, next, query[jsonpCallbackName]);
         }
         if (query && query.operation) {
-            return process(res, req.query, next);
+            return process(client, req.query, next);
         }
         res.send('The YamlQL service is running');
         next();
     });
     //请求处理
     router.post('/', function (req, res, next) {
-        process(res, req.body, next);
+        process(new Client(req, res), req.body, next);
     });
     //文档服务
     router.get('/docs', function (req, res, next) {
