@@ -15,9 +15,11 @@ export default class BuiltIn {
     __number(str: string): number;
     __string(obj: any): any;
     __boolean(obj: any): boolean;
+    __date(obj: any): Date;
     __parse(str: string): any;
     __stringify(obj: any): string;
     __merge(...args: Array<any>): any;
     __object(...args: Array<any>): any;
     __array(array: any): any;
+    __value(value: any): any;
 }

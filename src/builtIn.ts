@@ -86,6 +86,10 @@ export default class BuiltIn {
     return Boolean(obj);
   }
 
+  public __date(obj: any) {
+    return new Date(obj);
+  }
+
   public __parse(str: string) {
     try {
       return JSON.parse(str);
@@ -110,6 +114,10 @@ export default class BuiltIn {
     if (!array) return array;
     if (!('length' in array)) array.length = Object.keys(array).length;
     return [].slice.call(array);
+  }
+
+  public __value(value: any) {
+    return value;
   }
 
 }

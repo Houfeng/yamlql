@@ -12,10 +12,12 @@ export class Context {
 
   private processor: Processor;
   private options: IContextOptions;
+  private client: any;
   private invokeCount: number = 0;
 
-  constructor(processor: Processor, options: IContextOptions) {
+  constructor(processor: Processor, options: IContextOptions, client: any) {
     this.processor = processor;
+    this.client = client;
     this.options = options;
   }
 
@@ -72,7 +74,13 @@ export class Context {
     const { action, params, fields } = operation;
     const paramValues = this.getParams(params, variables) || {};
     const { metadata } = this.options;
-    const result = await this.processor.invoke(action, paramValues, metadata);
+    const metadataObj = metadata ?
+      (isString(metadata) ? JSON.parse(metadata as string) : metadata) : {};
+    const invokeOpts = {
+      method: action, params: paramValues,
+      metadata: metadataObj, client: this.client
+    };
+    const result = await this.processor.invoke(invokeOpts);
     return fields ? this.convertResult(result, fields, variables) : result;
   }
 

@@ -3,8 +3,9 @@ import IContextOptions from './IContextOptions';
 export declare class Context {
     private processor;
     private options;
+    private client;
     private invokeCount;
-    constructor(processor: Processor, options: IContextOptions);
+    constructor(processor: Processor, options: IContextOptions, client: any);
     private isVariable(val);
     private trimVariable(name);
     private isOperation(val);

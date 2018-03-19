@@ -1,7 +1,7 @@
-import IMap from './IMap';
+import IInvokeOptions from './IInvokeOptions';
 
 export interface IProcessorOptions {
-  invoke?(method: string, params: IMap | Array<any>, request: any): any;
+  invoke?(options: IInvokeOptions): any;
   root?: any;
   docs?: any;
   invokeThreshold?: number;
