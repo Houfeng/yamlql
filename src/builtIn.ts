@@ -1,96 +1,97 @@
-const { isNull, iArray, isString } = require('ntils');
+const { isNull, iArray, isString, formatDate } = require('ntils');
 
 export default class BuiltIn {
 
   // map 直接返回就行，YamlQL 本身即可能 map
-  public __map(arg: any) {
+  public _map(arg: any) {
     return arg;
   }
 
-  public __slice(list: Array<any>, start: number, end: number) {
+  public _slice(list: Array<any>, start: number, end: number) {
     if (!list) return list;
     if (!iArray(list)) return [];
     return list.slice(start, end);
   }
 
-  public __limit(list: Array<any>, skip: number, limit: number) {
+  public _limit(list: Array<any>, skip: number, limit: number) {
     if (!list) return list;
     if (!iArray(list)) return [];
     return list.slice(skip, skip + limit);
   }
 
-  public __reverse(list: Array<any>) {
+  public _reverse(list: Array<any>) {
     if (!list) return list;
     if (!iArray(list)) return [];
     return list.reverse();
   }
 
-  public __concat(list: Array<any>, ...args: Array<any>) {
+  public _concat(list: Array<any>, ...args: Array<any>) {
     if (!list) return list;
     if (!iArray(list)) return [];
     return list.concat(list, ...args);
   }
 
-  public __keys(obj: any) {
+  public _keys(obj: any) {
     return Object.keys(obj);
   }
 
-  public __values(obj: any) {
+  public _values(obj: any) {
     return Object.values(obj);
   }
 
-  public __find(list: Array<any>, name: string, value: any) {
+  public _find(list: Array<any>, name: string, value: any) {
     if (!list || !iArray(list)) return;
     return list.find(item => item === name) ||
       list.find(item => item[name] === value);
   }
 
-  public __filter(list: Array<any>, name: string, value: any) {
+  public _filter(list: Array<any>, name: string, value: any) {
     if (!list || !iArray(list)) return [];
     return isNull(value) ? list.filter(item => item === name)
       : list.filter(item => item[name] === value);
   }
 
-  public __join(list: Array<string>, split: string) {
+  public _join(list: Array<string>, split: string) {
     if (!list) return '';
     if (!iArray(list)) return list;
     return list.join(split);
   }
 
-  public __split(str: string, split: string) {
+  public _split(str: string, split: string) {
     if (!str) return str;
     if (!isString(str)) return [str];
     return str.split(split);
   }
 
-  public __substr(str: string, start: number, length: number) {
+  public _substr(str: string, start: number, length: number) {
     if (!str) return str;
     return str.substr(start, length);
   }
 
-  public __substring(str: string, start: number, end: number) {
+  public _substring(str: string, start: number, end: number) {
     if (!str) return str;
     return str.substring(start, end);
   }
 
-  public __number(str: string) {
+  public _number(str: string) {
     return Number(str);
   }
 
-  public __string(obj: any) {
+  public _string(obj: any) {
     if (!obj) return String(obj);
     return obj.toString();
   }
 
-  public __boolean(obj: any) {
+  public _boolean(obj: any) {
     return Boolean(obj);
   }
 
-  public __date(obj: any) {
-    return new Date(obj);
+  public _date(obj: any, format?: string) {
+    const date = new Date(obj);
+    return format ? formatDate(date, format) : date;
   }
 
-  public __parse(str: string) {
+  public _parse(str: string) {
     try {
       return JSON.parse(str);
     } catch{
@@ -98,25 +99,25 @@ export default class BuiltIn {
     }
   }
 
-  public __stringify(obj: any) {
+  public _stringify(obj: any) {
     return JSON.stringify(obj);
   }
 
-  public __merge(...args: Array<any>) {
+  public _merge(...args: Array<any>) {
     return Object.assign({}, ...args);
   }
 
-  public __object(...args: Array<any>) {
+  public _object(...args: Array<any>) {
     return Object.assign({}, ...args);
   }
 
-  public __array(array: any) {
+  public _array(array: any) {
     if (!array) return array;
     if (!('length' in array)) array.length = Object.keys(array).length;
     return [].slice.call(array);
   }
 
-  public __value(value: any) {
+  public _value(value: any) {
     return value;
   }
 

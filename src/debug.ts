@@ -21,6 +21,9 @@ users:
       fields:
         .: .
         id: false
+demo:
+  action: _value
+  params: =$id
     `;
 const variables = { id: 123 };
 
