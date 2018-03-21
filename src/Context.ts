@@ -61,10 +61,12 @@ export class Context {
       let str = params as string;
       if (/^\=/.test(str)) str = str.slice(1);
       return str;
+    } else if (!isObject(params) || !isArray(params)) {
+      return params;
     }
     const values: any = isArray(params) ? [] : {};
     each(params, (name: string, value: any) => {
-      values[name] = this.getParams(value, variables);
+      values[name] = this.parseParams(value, variables);
     });
     return values;
   }

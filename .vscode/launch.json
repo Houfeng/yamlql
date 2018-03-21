@@ -8,14 +8,12 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}/lib/debug.js"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "启动程序",
-      "program": "${workspaceFolder}/src/debug.ts",
-      "preLaunchTask": "tsc: build - tsconfig.json",
+      "program": "${workspaceFolder}/lib/debug.js",
+      "env": {
+        "DEBUG": "app,static"
+      },
+      "preLaunchTask": "tsc",
+      "console": "integratedTerminal",
       "outFiles": [
         "${workspaceFolder}/lib/**/*.js"
       ]

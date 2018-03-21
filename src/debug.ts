@@ -12,26 +12,12 @@ const processor = new Processor({
 });
 
 const operation = `
-users:
-  action: users
-  params: $id
-  fields:
-    code: code
-    data: 
-      fields:
-        .: .
-        id: false
-demo:
-  action: _value
-  params: =$id
-
-data:
-  action: _value
-  params: $opts
-total:
-  action: _value
-  parmas: $opts 
-    `;
+data: 
+  action: _date
+  params: 
+    - 2018-10-10
+    - yyyy年MM月dd日
+`;
 const variables = { id: 123, opts: { skip: 0, limit: 10 } };
 
 (async function () {
