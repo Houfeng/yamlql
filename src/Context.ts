@@ -71,7 +71,7 @@ export class Context {
 
   private getParams(params: any, variables: any): IMap | Array<any> {
     let values = this.parseParams(params, variables);
-    if (!isArray(values) && !isObject(values)) values = [values];
+    if (!isArray(params) && !isObject(params)) values = [values];
     return values;
   }
 
