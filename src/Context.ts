@@ -30,10 +30,13 @@ export class Context {
   private trimVariable(name: any): string {
     if (!name) return name;
     const str = name as string;
+    //$代表取整个变量对象
     if (str === '$') return '.';
+    //.代表取当前结果对象
     if (/^\./.test(str)) return '@' + str;
-    //if (str.length == 1 || /^\$\./.test(str)) return str;
-    return str.slice(1);
+    //普通变量
+    if (/^\$/.test(str)) return str.slice(1);
+    return name;
   }
 
   /**
@@ -42,7 +45,7 @@ export class Context {
    * @param path 值路径
    */
   getVarValue(variables: any, path: string) {
-    if (path == '$') {
+    if (path == '.') {
       const newVaribles = Object.assign({}, variables);
       delete newVaribles['@'];
       return newVaribles;
@@ -61,7 +64,7 @@ export class Context {
       let str = params as string;
       if (/^\=/.test(str)) str = str.slice(1);
       return str;
-    } else if (!isObject(params) || !isArray(params)) {
+    } else if (!isObject(params) && !isArray(params)) {
       return params;
     }
     const values: any = isArray(params) ? [] : {};

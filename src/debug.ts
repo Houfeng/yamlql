@@ -13,10 +13,9 @@ const processor = new Processor({
 
 const operation = `
 data: 
-  action: _date
+  action: users
   params: 
-    - 2018-10-10
-    - yyyy年MM月dd日
+    id: $
 `;
 const variables = { id: 123, opts: { skip: 0, limit: 10 } };
 
