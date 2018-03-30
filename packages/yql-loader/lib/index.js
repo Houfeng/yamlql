@@ -5,6 +5,9 @@ const os = require('os');
 
 const IMPORT_REGEXP = /^#\s*(import|include|require)\s*(\'|\")(.+?)(\'|\")/;
 const EXTENSIONS = ['.yql', '.yamlql'];
+const HANDLER_PATH = require.resolve('./handler');
+const REQUEST_PATH = require.resolve('./request');
+const DEFAULT_URL = '/yamlql';
 
 function getFile(cwd, filePath, options, tryExts) {
   tryExts = (tryExts || options.extensions || []).slice(0);
@@ -49,8 +52,8 @@ function getOptions(ctx) {
   return _.defaults(options, {
     extensions: EXTENSIONS,
     string: false,
-    url: '/yamlql',
-    request: require.resolve('./request')
+    url: DEFAULT_URL,
+    request: REQUEST_PATH
   });
 }
 
@@ -59,21 +62,16 @@ function loader(source) {
   const options = getOptions(this);
   const result = parse.call(this, this.context, source, options);
   const operation = JSON.stringify(result.join(os.EOL));
+  const url = JSON.stringify(options.url);
   if (options.string) {
     return `module.exports = ${operation}`;
   } else {
-    return `var request = require('${options.request}');
-    var url = '${options.url}';
-    module.exports = function (variables, options, metadata) {
-      options = options || {};
-      metadata = metadata || options.metadata;
-      var data = {
-        operation: ${operation},
-        variables: JSON.stringify(variables),
-        metadata: JSON.stringify(metadata)
-      };
-      return request(url, data, options);
-    };`
+    return `//YamlQL
+var req = require('${options.request}');
+var handler = require('${HANDLER_PATH}');
+module.exports = function (variables, options, metadata) {
+  return handler(req, ${url}, ${operation}, variables, options, metadata);
+};`
   }
 }
 

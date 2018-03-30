@@ -1,10 +1,8 @@
-var request = require('${options.request}');
-var url = '${options.url}';
-module.exports = function (variables, options, metadata) {
+module.exports = function (request, url, operation, variables, options, metadata) {
   options = options || {};
   metadata = metadata || options.metadata;
   var data = {
-    operation: '${operation}',
+    operation: operation,
     variables: JSON.stringify(variables),
     metadata: JSON.stringify(metadata)
   };
