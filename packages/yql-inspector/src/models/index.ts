@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const STORE_PREFIX = '$YQLInspector';
+const PAGE_ID = encodeURIComponent(location.href);
+const STORE_PREFIX = `yamlql://inspector/${PAGE_ID}`;
 const STORE_PARAMS_KEY = STORE_PREFIX + '/params';
 const STORE_RESULT_KEY = STORE_PREFIX + '/result';
 
