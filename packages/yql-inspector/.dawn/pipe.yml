@@ -25,6 +25,7 @@ build:
   - name: webpack
     entry:
       inspector: ./src/index.tsx
+      editor: ./src/Editor/index.tsx
     template: '-'
     env: production
     common:
