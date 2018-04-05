@@ -1,10 +1,15 @@
-const { isNull, iArray, isString, formatDate } = require('ntils');
+const {
+  isNull, iArray, isString, formatDate, getByPath, setByPath
+} = require('ntils');
 
 export default class BuiltIn {
 
-  // map 直接返回就行，YamlQL 本身即可能 map
-  public __map(arg: any) {
-    return arg;
+  public __get(obj: any, path: string) {
+    return getByPath(obj, path);
+  }
+
+  public __set(obj: any, path: string, value: any) {
+    return setByPath(obj, path, value);
   }
 
   public __slice(list: Array<any>, start: number, end: number) {

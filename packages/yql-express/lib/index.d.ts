@@ -4,6 +4,7 @@ import { IProcessorOptions } from 'yamlql';
 export interface IServerOptions {
     jsonpCallbackName?: string;
     processor: IProcessorOptions;
+    onReady?: Function;
 }
 export declare class Client {
     req: Request;

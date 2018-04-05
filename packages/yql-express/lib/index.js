@@ -14,7 +14,7 @@ class Client {
 }
 exports.Client = Client;
 function middleware(options) {
-    const { jsonpCallbackName } = options;
+    const { jsonpCallbackName, onReady } = options;
     const processor = new yamlql_1.Processor(options.processor);
     //序列化
     function stringify(data, jsonpCallback) {
@@ -63,6 +63,8 @@ function middleware(options) {
     router.use('/inspector', express.static(inspectorRoot, {
         fallthrough: false
     }));
+    if (onReady)
+        onReady({ processor });
     return router;
 }
 exports.default = middleware;

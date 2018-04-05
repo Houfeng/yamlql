@@ -1,5 +1,6 @@
 import * as React from 'react';
 import MonacoEditor from 'react-monaco-editor';
+import { sleep } from '../common/sleep';
 
 export interface IEditorPorps {
   language?: string;
@@ -38,14 +39,16 @@ export default class Editor extends React.Component<IEditorPorps, any> {
     </div>;
   }
 
-  editorDidMount = () => {
+  editorDidMount = async () => {
+    await sleep(0);
     const { editor } = this;
     if (!editor) return;
     editor.getModel().updateOptions({ tabSize: 2 });
     editor.layout();
   }
 
-  getSelectedText() {
+  getSelectedText = async () => {
+    await sleep(0);
     const { editor } = this;
     if (!editor) return;
     return editor.getModel().getValueInRange(editor.getSelection());

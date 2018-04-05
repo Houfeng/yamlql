@@ -41,7 +41,7 @@ export default class Inspector extends React.Component<IInspectorPorps, any> {
 
   execute = async () => {
     try {
-      this.model.selectedText = this.operation.getSelectedText();
+      this.model.selectedText = await this.operation.getSelectedText();
       await this.model.execute();
       this.result.editor.setScrollTop(0);
     } catch (err) {

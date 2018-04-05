@@ -11,12 +11,13 @@ export interface IServerOptions {
   prefix?: string;
   jsonpCallbackName?: string;
   processor: IProcessorOptions;
+  onReady?: Function;
 }
 
 export default function middleware(options: IServerOptions) {
 
   const router = new Router();
-  const { jsonpCallbackName } = options;
+  const { jsonpCallbackName, onReady } = options;
   const processor = new Processor(options.processor);
 
   //序列化
@@ -80,6 +81,8 @@ export default function middleware(options: IServerOptions) {
   };
   router.all(inspectorPath, inspectorHandler);
   router.all(inspectorPath + '/*', inspectorHandler);
+
+  if (onReady) onReady({ processor });
 
   return router.routes();
 }

@@ -1,5 +1,6 @@
 export default class BuiltIn {
-    __map(arg: any): any;
+    __get(obj: any, path: string): any;
+    __set(obj: any, path: string, value: any): any;
     __slice(list: Array<any>, start: number, end: number): any[];
     __limit(list: Array<any>, skip: number, limit: number): any[];
     __reverse(list: Array<any>): any[];

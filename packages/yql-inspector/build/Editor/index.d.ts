@@ -12,6 +12,6 @@ export default class Editor extends React.Component<IEditorPorps, any> {
     monaco: MonacoEditor;
     readonly editor: monaco.editor.ICodeEditor;
     render(): JSX.Element;
-    editorDidMount: () => void;
-    getSelectedText(): string;
+    editorDidMount: () => Promise<void>;
+    getSelectedText: () => Promise<string>;
 }

@@ -7,7 +7,7 @@ const yamlql_1 = require("yamlql");
 const send = require("koa-send");
 function middleware(options) {
     const router = new Router();
-    const { jsonpCallbackName } = options;
+    const { jsonpCallbackName, onReady } = options;
     const processor = new yamlql_1.Processor(options.processor);
     //序列化
     function stringify(data, jsonpCallback) {
@@ -65,6 +65,8 @@ function middleware(options) {
     };
     router.all(inspectorPath, inspectorHandler);
     router.all(inspectorPath + '/*', inspectorHandler);
+    if (onReady)
+        onReady({ processor });
     return router.routes();
 }
 exports.default = middleware;

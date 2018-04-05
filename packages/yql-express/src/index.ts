@@ -10,7 +10,8 @@ const router = Router();
 
 export interface IServerOptions {
   jsonpCallbackName?: string,
-  processor: IProcessorOptions
+  processor: IProcessorOptions,
+  onReady?: Function
 }
 
 export class Client {
@@ -26,7 +27,7 @@ export class Client {
 
 export default function middleware(options: IServerOptions): RequestHandler {
 
-  const { jsonpCallbackName } = options;
+  const { jsonpCallbackName, onReady } = options;
   const processor = new Processor(options.processor);
 
   //序列化
@@ -86,6 +87,8 @@ export default function middleware(options: IServerOptions): RequestHandler {
   router.use('/inspector', express.static(inspectorRoot, {
     fallthrough: false
   }));
+
+  if (onReady) onReady({ processor });
 
   return router;
 }
