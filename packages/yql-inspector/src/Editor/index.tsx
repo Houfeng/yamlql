@@ -39,14 +39,15 @@ export default class Editor extends React.Component<IEditorPorps, any> {
   }
 
   editorDidMount = () => {
-    this.editor.getModel().updateOptions({
-      tabSize: 2
-    });
-    this.editor.layout();
+    const { editor } = this;
+    if (!editor) return;
+    editor.getModel().updateOptions({ tabSize: 2 });
+    editor.layout();
   }
 
   getSelectedText() {
     const { editor } = this;
+    if (!editor) return;
     return editor.getModel().getValueInRange(editor.getSelection());
   }
 
