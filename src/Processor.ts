@@ -3,7 +3,7 @@ import IProcessorOptions from './IProcessorOptions';
 import IContextOptions from './IContextOptions';
 import { Context } from './Context';
 import IInvokeOptions from './IInvokeOptions';
-import BuiltIn from './BuiltIn';
+import BuiltIn from './builtIn';
 
 const debug = require('debug')('processor');
 const {
