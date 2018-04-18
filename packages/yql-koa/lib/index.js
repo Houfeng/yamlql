@@ -7,7 +7,7 @@ const yamlql_1 = require("yamlql");
 const send = require("koa-send");
 function middleware(options) {
     const router = new Router();
-    const { jsonpCallbackName, onReady } = options;
+    const { jsonpCallbackName, onReady, errorStack } = options;
     const processor = new yamlql_1.Processor(options.processor);
     //序列化
     function stringify(data, jsonpCallback) {
@@ -23,7 +23,11 @@ function middleware(options) {
             next();
         }
         catch (err) {
-            ctx.body = stringify({ error: err.message }, jsonpCallback);
+            const error = errorStack ? {
+                message: err.message,
+                stack: err.stack
+            } : err.message;
+            ctx.body = stringify({ error }, jsonpCallback);
             next(err);
         }
     }

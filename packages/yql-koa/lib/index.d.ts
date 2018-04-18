@@ -6,5 +6,6 @@ export interface IServerOptions {
     jsonpCallbackName?: string;
     processor: IProcessorOptions;
     onReady?: Function;
+    errorStack?: boolean;
 }
 export default function middleware(options: IServerOptions): Router.IMiddleware;

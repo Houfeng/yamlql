@@ -12,12 +12,13 @@ export interface IServerOptions {
   jsonpCallbackName?: string;
   processor: IProcessorOptions;
   onReady?: Function;
+  errorStack?: boolean;
 }
 
 export default function middleware(options: IServerOptions) {
 
   const router = new Router();
-  const { jsonpCallbackName, onReady } = options;
+  const { jsonpCallbackName, onReady, errorStack } = options;
   const processor = new Processor(options.processor);
 
   //序列化
@@ -36,7 +37,11 @@ export default function middleware(options: IServerOptions) {
       next();
     }
     catch (err) {
-      ctx.body = stringify({ error: err.message }, jsonpCallback);
+      const error = errorStack ? {
+        message: err.message,
+        stack: err.stack
+      } : err.message;
+      ctx.body = stringify({ error }, jsonpCallback);
       next(err);
     }
   }
