@@ -14,7 +14,7 @@ class Client {
 }
 exports.Client = Client;
 function middleware(options) {
-    const { jsonpCallbackName, onReady } = options;
+    const { jsonpCallbackName, onReady, errorStack } = options;
     const processor = new yamlql_1.Processor(options.processor);
     //序列化
     function stringify(data, jsonpCallback) {
@@ -28,7 +28,11 @@ function middleware(options) {
             client.res.send(stringify(result, jsonpCallback));
             next();
         }).catch(err => {
-            client.res.send(stringify({ error: err.message }, jsonpCallback));
+            const error = errorStack ? {
+                message: err.message,
+                stack: err.stack
+            } : err.message;
+            client.res.send(stringify({ error }, jsonpCallback));
             next(err);
         });
     }

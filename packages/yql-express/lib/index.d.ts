@@ -5,6 +5,7 @@ export interface IServerOptions {
     jsonpCallbackName?: string;
     processor: IProcessorOptions;
     onReady?: Function;
+    errorStack?: boolean;
 }
 export declare class Client {
     req: Request;
