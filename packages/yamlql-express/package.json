@@ -1,5 +1,5 @@
 {
-  "name": "yql-express",
+  "name": "yamlql-express",
   "version": "1.0.5",
   "description": "",
   "main": "./lib/index.js",
@@ -19,7 +19,7 @@
     "ntils": "^4.0.0",
     "require-dir": "^1.0.0",
     "yamlql": "^0.1.3",
-    "yql-inspector": "^1.0.1"
+    "yamlql-inspector": "^1.0.1"
   },
   "devDependencies": {
     "@types/body-parser": "^1.16.8",

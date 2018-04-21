@@ -1,5 +1,5 @@
 {
-  "name": "yql-inspector",
+  "name": "yamlql-inspector",
   "version": "1.0.7",
   "description": "",
   "main": "./build/js/inspector.js",

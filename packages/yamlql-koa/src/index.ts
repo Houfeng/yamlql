@@ -74,7 +74,7 @@ export default function middleware(options: IServerOptions) {
   });
 
   //探查器
-  const inspectorPackage = require.resolve('yql-inspector');
+  const inspectorPackage = require.resolve('yamlql-inspector');
   const inspectorWebRoot = path.resolve(inspectorPackage, '../../');
   const inspectorPath = '/inspector';//new RegExp(inspectorPath, 'i')
   const inspectorHandler = async (ctx: Context, next: Function) => {

@@ -1,5 +1,5 @@
 {
-  "name": "yql-loader",
+  "name": "yamlql-loader",
   "version": "0.2.3",
   "description": "",
   "main": "./lib/index.js",

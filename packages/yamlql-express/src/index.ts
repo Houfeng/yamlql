@@ -87,7 +87,7 @@ export default function middleware(options: IServerOptions): RequestHandler {
   });
 
   //探查器
-  const inspectorPath = require.resolve('yql-inspector');
+  const inspectorPath = require.resolve('yamlql-inspector');
   const inspectorRoot = path.resolve(inspectorPath, '../../');
   router.use('/inspector', express.static(inspectorRoot, {
     fallthrough: false
