@@ -1,4 +1,4 @@
-const axios = require('axios');
+var axios = require('axios');
 
 axios.defaults.withCredentials = true;
 
