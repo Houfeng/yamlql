@@ -9,7 +9,7 @@ dev:
   - name: copy
     files: *files
   - name: typescript
-  - name: webpack
+  - name: webpack@2
     entry: ./src/example/*.tsx
     template: ./src/assets/development.html
     watch: true
@@ -22,7 +22,7 @@ build:
   - name: copy
     files: *files
   - name: typescript
-  - name: webpack
+  - name: webpack@2
     entry:
       inspector: ./src/index.tsx
       editor: ./src/Editor/index.tsx

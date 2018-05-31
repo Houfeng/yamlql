@@ -1,6 +1,6 @@
 {
   "name": "yamlql-inspector",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "./build/js/inspector.js",
   "typings": "./build/index.d.ts",
@@ -25,7 +25,7 @@
     "axios": "^0.18.0",
     "classnames": "^2.2.5",
     "font-awesome": "^4.7.0",
-    "monaco-editor": "^0.10.1",
+    "monaco-editor": "^0.12.0",
     "mota": "^0.6.0",
     "react": "^16.3.2",
     "react-dock-panel": "^1.0.9",
