@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { IClientOptions } from './IClientOptions';
 
+axios.defaults.withCredentials = true;
+
 export class YamlQlClient {
   private opiotns: IClientOptions;
 
