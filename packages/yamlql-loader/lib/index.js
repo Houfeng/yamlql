@@ -4,10 +4,11 @@ const _ = require('lodash');
 const os = require('os');
 
 const IMPORT_REGEXP = /^#\s*(import|include|require)\s*(\'|\")(.+?)(\'|\")/;
+const ENDPOINT_REGEXP = /^#\s*(endpoint|url|api)\s*(\'|\")(.+?)(\'|\")/;
 const EXTENSIONS = ['.yql', '.yamlql'];
 const HANDLER_PATH = require.resolve('./handler');
 const REQUEST_PATH = require.resolve('./request');
-const DEFAULT_URL = '/yamlql';
+const DEFAULT_ENDPOINT = '/yamlql';
 
 function getFile(cwd, filePath, options, tryExts) {
   tryExts = (tryExts || options.extensions || []).slice(0);
@@ -47,12 +48,17 @@ function parse(cwd, source, options) {
   return _.uniq(contents);
 }
 
+function parseEndpoint(source) {
+  const matchInfo = ENDPOINT_REGEXP.exec(source);
+  return matchInfo && matchInfo[3];
+}
+
 function getOptions(ctx) {
   const options = ctx.loaders[ctx.loaderIndex].options || {};
   return _.defaults(options, {
     extensions: EXTENSIONS,
     string: false,
-    url: DEFAULT_URL,
+    endpoint: DEFAULT_ENDPOINT,
     request: REQUEST_PATH
   });
 }
@@ -62,7 +68,9 @@ function loader(source) {
   const options = getOptions(this);
   const result = parse.call(this, this.context, source, options);
   const operation = JSON.stringify(result.join(os.EOL));
-  const url = JSON.stringify(options.url);
+  const endpoint = JSON.stringify(
+    parseEndpoint(source) || options.url || options.endpoint
+  );
   if (options.string) {
     return `module.exports = ${operation}`;
   } else {
@@ -70,7 +78,7 @@ function loader(source) {
 var req = require('${options.request}');
 var handler = require('${HANDLER_PATH}');
 module.exports = function (variables, options, metadata) {
-  return handler(req, ${url}, ${operation}, variables, options, metadata);
+  return handler(req, ${endpoint}, ${operation}, variables, options, metadata);
 };`
   }
 }
