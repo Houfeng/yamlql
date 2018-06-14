@@ -34,8 +34,7 @@ export default function middleware(options: IServerOptions) {
       ctx.body = stringify(result, jsonpCallback);
       next();
     } catch (err) {
-      console.log('xxxxx')
-      ctx.body = stringify(new YamQLError(err, { xx: 99 }), jsonpCallback);
+      ctx.body = stringify(new YamQLError(err), jsonpCallback);
       next(err);
     }
   }

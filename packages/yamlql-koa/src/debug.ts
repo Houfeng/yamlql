@@ -6,14 +6,13 @@ const options = {
   processor: {
     root: {
       getUser(id: string) {
-        throw new Error('xxx')
         return {
           code: 200,
           data: { userId: id, userName: '用户' + id, userAge: id }
         };
       },
       getUsers() {
-        return {
+        return { 
           code: 200,
           data: (() => {
             const list = [];
