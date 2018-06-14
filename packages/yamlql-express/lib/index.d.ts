@@ -1,4 +1,3 @@
-/// <reference types="express" />
 import { RequestHandler, Request, Response } from 'express';
 import { IProcessorOptions } from 'yamlql';
 export interface IServerOptions {

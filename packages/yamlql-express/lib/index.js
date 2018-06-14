@@ -28,11 +28,7 @@ function middleware(options) {
             client.res.send(stringify(result, jsonpCallback));
             next();
         }).catch(err => {
-            const error = errorStack ? {
-                message: err.message,
-                stack: err.stack
-            } : err.message;
-            client.res.send(stringify({ error }, jsonpCallback));
+            client.res.send(stringify(new yamlql_1.YamQLError(err), jsonpCallback));
             next(err);
         });
     }
