@@ -23,11 +23,7 @@ function middleware(options) {
             next();
         }
         catch (err) {
-            const error = errorStack ? {
-                message: err.message,
-                stack: err.stack
-            } : err.message;
-            ctx.body = stringify({ error }, jsonpCallback);
+            ctx.body = stringify(new yamlql_1.YamQLError(err), jsonpCallback);
             next(err);
         }
     }

@@ -11,7 +11,7 @@ export class YamlQLError extends Error {
     } else {
       super(opts);
     }
-    this.attach = opts;
+    this.attach = attach;
   }
 
   toJSON() {

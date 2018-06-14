@@ -10,7 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "yamlql": "^0.1.13",
+    "yamlql": "^0.1.14",
     "yamlql-inspector": "^1.0.0",
     "body-parser": "^1.18.2",
     "debug": "^3.1.0",
