@@ -3,9 +3,10 @@ import Context from './Context';
 import IProcessorOptions from './IProcessorOptions';
 import IContextOptions from './IContextOptions';
 import IInvokeOptions from './IInvokeOptions';
-import IMap from './IMap';
+import YamQLError from './Error';
 
 export {
-  Processor, Context, IProcessorOptions, IContextOptions, IInvokeOptions
+  Processor, Context, YamQLError,
+  IProcessorOptions, IContextOptions, IInvokeOptions
 };
 export default Processor;
