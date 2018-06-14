@@ -28,7 +28,7 @@ function middleware(options) {
             client.res.send(stringify(result, jsonpCallback));
             next();
         }).catch(err => {
-            client.res.send(stringify(new yamlql_1.YamQLError(err), jsonpCallback));
+            client.res.send(stringify(new yamlql_1.YamlQLError(err), jsonpCallback));
             next(err);
         });
     }

@@ -4,7 +4,7 @@ import {
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
-import { Processor, IProcessorOptions, YamQLError } from 'yamlql';
+import { Processor, IProcessorOptions, YamlQLError } from 'yamlql';
 
 const router = Router();
 
@@ -45,7 +45,7 @@ export default function middleware(options: IServerOptions): RequestHandler {
       client.res.send(stringify(result, jsonpCallback));
       next();
     }).catch(err => {
-      client.res.send(stringify(new YamQLError(err), jsonpCallback));
+      client.res.send(stringify(new YamlQLError(err), jsonpCallback));
       next(err);
     });
   }

@@ -23,7 +23,7 @@ function middleware(options) {
             next();
         }
         catch (err) {
-            ctx.body = stringify(new yamlql_1.YamQLError(err), jsonpCallback);
+            ctx.body = stringify(new yamlql_1.YamlQLError(err), jsonpCallback);
             next(err);
         }
     }

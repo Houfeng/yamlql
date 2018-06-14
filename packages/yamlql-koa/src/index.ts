@@ -2,7 +2,7 @@ import * as path from 'path';
 import { Context } from 'koa';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
-import { Processor, IProcessorOptions, YamQLError } from 'yamlql';
+import { Processor, IProcessorOptions, YamlQLError } from 'yamlql';
 import * as send from 'koa-send';
 
 export interface IServerOptions {
@@ -34,7 +34,7 @@ export default function middleware(options: IServerOptions) {
       ctx.body = stringify(result, jsonpCallback);
       next();
     } catch (err) {
-      ctx.body = stringify(new YamQLError(err), jsonpCallback);
+      ctx.body = stringify(new YamlQLError(err), jsonpCallback);
       next(err);
     }
   }
