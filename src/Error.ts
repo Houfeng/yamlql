@@ -1,16 +1,23 @@
 export class YamlQLError extends Error {
 
-  public options: any;
+  private attach: any;
 
-  constructor(message: string, opts: any = {}) {
-    super(message);
-    this.options = opts;
+  constructor(opts: string | Error, attach: any = {}) {
+    if (opts instanceof Error) {
+      const { name, message, stack } = opts;
+      super(message);
+      this.name = name;
+      this.stack = stack;
+    } else {
+      super(opts);
+    }
+    this.attach = opts;
   }
 
   toJSON() {
-    const { message, options } = this;
+    const { message, attach } = this;
     const error = message;
-    return { error, ...options };
+    return { error, ...attach };
   }
 
 }

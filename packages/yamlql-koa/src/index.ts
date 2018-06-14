@@ -1,10 +1,8 @@
 import * as path from 'path';
 import { Context } from 'koa';
 import * as Router from 'koa-router';
-import * as serve from 'koa-static';
-import { Options } from 'koa-static';
 import * as bodyParser from 'koa-bodyparser';
-import { Processor, IProcessorOptions } from 'yamlql';
+import { Processor, IProcessorOptions, YamQLError } from 'yamlql';
 import * as send from 'koa-send';
 
 export interface IServerOptions {
@@ -35,8 +33,7 @@ export default function middleware(options: IServerOptions) {
       const result = await processor.process(data, ctx);
       ctx.body = stringify(result, jsonpCallback);
       next();
-    }
-    catch (err) {
+    } catch (err) {
       const error = errorStack ? {
         message: err.message,
         stack: err.stack

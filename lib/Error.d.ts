@@ -1,6 +1,6 @@
 export declare class YamlQLError extends Error {
-    options: any;
-    constructor(message: string, opts?: any);
+    private attach;
+    constructor(opts: string | Error, attach?: any);
     toJSON(): any;
 }
 export default YamlQLError;
