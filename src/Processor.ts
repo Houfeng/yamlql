@@ -38,22 +38,20 @@ export default class Processor {
     //如果 action 是对象直接返回当作结果
     if (isObject(method)) return method;
     //如果是函数，执行并返回结果
-    if (isFunction(method)) return this.invokeOn(null, options);
+    if (isFunction(method)) return this.exec(method, options);
     //如果是内建函数，执行内建函数并返回结果
-    if (this.builtIn[method]) {
-      return this.invokeOn(this.builtIn, options);
-    }
+    const builtInFunc = getByPath(this.builtIn, method);
+    if (builtInFunc) return this.exec(builtInFunc, options);
     //如果构造 processor 时指定了 invoke，调用 invoke 执行
     const { invoke } = this.options;
     if (invoke) return invoke(options);
-    //最后在 this.root 上执行
-    return this.invokeOn(this.root, options);
+    //如果通过 root 挂载的函数，调用并返回结果
+    const func = getByPath(this.root, method);
+    return this.exec(func, options);
   }
 
-  private invokeOn(owner: any, options: IInvokeOptions) {
+  private exec(func: Function, options: IInvokeOptions) {
     const { method, params } = options;
-    const func: Function = isString(method) ?
-      getByPath(owner, method as string) : method;
     if (!func || !func.apply) {
       throw new Error(`Cannt find method '${method}'`);
     }

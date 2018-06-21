@@ -9,6 +9,6 @@ export default class Processor {
     readonly docs: any;
     readonly invokeThreshold: number;
     invoke(options: IInvokeOptions): any;
-    private invokeOn(owner, options);
+    private exec(func, options);
     process(options: IContextOptions, client?: any): Promise<any>;
 }
