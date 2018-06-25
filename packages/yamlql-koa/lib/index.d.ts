@@ -1,4 +1,5 @@
-import * as Router from 'koa-router';
+/// <reference types="koa-router" />
+import { Context } from 'koa';
 import { IProcessorOptions } from 'yamlql';
 export interface IServerOptions {
     prefix?: string;
@@ -7,4 +8,4 @@ export interface IServerOptions {
     onReady?: Function;
     errorStack?: boolean;
 }
-export default function middleware(options: IServerOptions): Router.IMiddleware;
+export default function middleware(options: IServerOptions): (context: Context, next: () => Promise<any>) => any;

@@ -1,10 +1,11 @@
 import * as Koa from 'koa';
 import yqlKoa from './index';
 import * as Router from 'koa-router';
+import { Resolver } from 'yamlql';
 
 const options = {
   processor: {
-    root: {
+    resolver: Resolver.create({
       getUser(id: string) {
         return {
           code: 200,
@@ -12,7 +13,7 @@ const options = {
         };
       },
       getUsers() {
-        return { 
+        return {
           code: 200,
           data: (() => {
             const list = [];
@@ -22,7 +23,7 @@ const options = {
           })()
         };
       }
-    }
+    })
   }
 };
 

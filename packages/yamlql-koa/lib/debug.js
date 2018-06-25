@@ -3,9 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Koa = require("koa");
 const index_1 = require("./index");
 const Router = require("koa-router");
+const yamlql_1 = require("yamlql");
 const options = {
     processor: {
-        root: {
+        resolver: yamlql_1.Resolver.create({
             getUser(id) {
                 return {
                     code: 200,
@@ -23,7 +24,7 @@ const options = {
                     })()
                 };
             }
-        }
+        })
     }
 };
 const app = new Koa();
