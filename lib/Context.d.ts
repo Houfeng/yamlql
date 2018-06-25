@@ -1,6 +1,5 @@
 import Processor from './Processor';
 import IContextOptions from './IContextOptions';
-import { Resolver } from './Resolver';
 export declare class Context {
     private __processor;
     private __options;
@@ -11,7 +10,7 @@ export declare class Context {
     readonly options: IContextOptions;
     readonly metadata: string | object;
     readonly client: any;
-    readonly resolvers: Resolver[];
+    readonly resolvers: any[];
     private createResolvers;
     private isVariable;
     private trimVariable;

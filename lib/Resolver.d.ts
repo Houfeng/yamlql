@@ -4,6 +4,5 @@ export declare class Resolver {
     private __context;
     constructor(context: Context);
     readonly context: Context;
-    static create(factory: Function | any): typeof Resolver;
 }
 export default Resolver;

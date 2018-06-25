@@ -14,7 +14,7 @@ export class Context {
   private __processor: Processor;
   private __options: IContextOptions;
   private __resolveCount: number = 0;
-  private __resolvers: Array<Resolver> = [];
+  private __resolvers: Array<Resolver | any> = [];
 
   constructor(processor: Processor, options: IContextOptions) {
     this.__processor = processor;
@@ -45,8 +45,9 @@ export class Context {
 
   private createResolvers() {
     const { resolvers } = this.processor;
-    this.__resolvers = resolvers.map(resolver => new resolver(this));
-    debug('createResolvers', (this.__resolvers[0] as any).users);
+    this.__resolvers = resolvers.map(resolver => {
+      return resolver instanceof Function ? new resolver(this) : resolver;
+    });
   }
 
   private isVariable(val: any): boolean {

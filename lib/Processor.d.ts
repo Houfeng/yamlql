@@ -12,6 +12,9 @@ export default class Processor {
     private isPrevent;
     private findMethodFilter;
     private findMethodInfo;
+    isResolver(obj: any): boolean;
+    isProcessor(obj: any): boolean;
+    isContext(obj: any): boolean;
     resolve(ctx: Context, options: IResolveOptions): any;
     process(options: IContextOptions): Promise<any>;
 }

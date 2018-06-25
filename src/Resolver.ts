@@ -14,12 +14,6 @@ export class Resolver {
     return this.__context;
   }
 
-  static create(factory: Function | any): typeof Resolver {
-    return (isFunction(factory) ? factory : function () {
-      return factory;
-    }) as typeof Resolver;
-  }
-
 }
 
 export default Resolver;

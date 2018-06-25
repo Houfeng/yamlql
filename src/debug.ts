@@ -5,22 +5,22 @@ import { IResolveOptions } from './IResolveOptions';
 import { YamlQLError } from './Error';
 
 const processor = new Processor({
-  resolver: Resolver.create({
-    users(id: string) {
+  resolver: {
+    users(ctx: Context, id: string) {
       return {
         code: 200,
         data: [{ id, name: '用户' + id, age: id }]
       };
     }
-  }),
+  },
   resolve(ctx: Context, options: IResolveOptions) {
-    throw new YamlQLError('不能找到 Resolve 方法', options);
+    throw new YamlQLError(`不能找到方法: ${options.method}`, options);
   }
 });
 
 const operation = `
 data: 
-  action: __value
+  action: users
   params: 
     id: $id
 `;
