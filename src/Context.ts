@@ -17,6 +17,9 @@ export class Context {
   private __resolvers: Array<Resolver | any> = [];
 
   constructor(processor: Processor, options: IContextOptions) {
+    options.operation = options.operation || {};
+    options.variables = options.variables || {};
+    options.metadata = options.metadata || {};
     this.__processor = processor;
     this.__options = options;
     this.createResolvers();
