@@ -1,12 +1,12 @@
 import * as Koa from 'koa';
 import yqlKoa from './index';
 import * as Router from 'koa-router';
-import { Resolver } from 'yamlql';
+import { Context } from 'yamlql';
 
 const options = {
   processor: {
-    resolver: Resolver.create({
-      getUser(id: string) {
+    resolver: {
+      getUser(ctx: Context, id: string) {
         return {
           code: 200,
           data: { userId: id, userName: '用户' + id, userAge: id }
@@ -23,7 +23,7 @@ const options = {
           })()
         };
       }
-    })
+    }
   }
 };
 
