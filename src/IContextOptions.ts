@@ -1,7 +1,7 @@
 export interface IContextOptions {
-  operation: string | object;
-  variables?: string | object;
-  metadata?: string | object;
+  operation: string | any;
+  variables?: string | any;
+  metadata?: string | any;
   client?: any;
 }
 

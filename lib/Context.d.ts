@@ -8,7 +8,7 @@ export declare class Context {
     constructor(processor: Processor, options: IContextOptions);
     readonly processor: Processor;
     readonly options: IContextOptions;
-    readonly metadata: string | object;
+    readonly metadata: any;
     readonly client: any;
     readonly resolvers: any[];
     private createResolvers;
