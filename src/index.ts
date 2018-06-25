@@ -1,12 +1,13 @@
 import Processor from './Processor';
 import Context from './Context';
+import Resolver from './Resolver';
+import YamlQLError from './Error';
 import IProcessorOptions from './IProcessorOptions';
 import IContextOptions from './IContextOptions';
-import IInvokeOptions from './IInvokeOptions';
-import YamlQLError from './Error';
+import IResolveOptions from './IResolveOptions';
 
 export {
-  Processor, Context, YamlQLError,
-  IProcessorOptions, IContextOptions, IInvokeOptions
+  Processor, Context, Resolver, YamlQLError,
+  IProcessorOptions, IContextOptions, IResolveOptions
 };
 export default Processor;

@@ -1,4 +1,5 @@
-export default class BuiltIn {
+import { Resolver } from "./Resolver";
+export default class BuiltIn extends Resolver {
     __get(obj: any, path: string): any;
     __set(obj: any, path: string, value: any): any;
     __slice(list: Array<any>, start: number, end: number): any[];

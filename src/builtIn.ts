@@ -1,8 +1,10 @@
+import { Resolver } from "./Resolver";
+
 const {
   isNull, iArray, isString, formatDate, getByPath, setByPath
 } = require('ntils');
 
-export default class BuiltIn {
+export default class BuiltIn extends Resolver {
 
   public __get(obj: any, path: string) {
     return getByPath(obj, path);

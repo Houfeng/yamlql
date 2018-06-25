@@ -1,11 +1,12 @@
-import IInvokeOptions from './IInvokeOptions';
+import IResolveOptions from './IResolveOptions';
+import { Resolver } from './Resolver';
+import { Context } from './Context';
 
 export interface IProcessorOptions {
-  invoke?(options: IInvokeOptions): any;
-  root?: any;
+  resolve?(ctx: Context, options: IResolveOptions): any;
+  resolver?: typeof Resolver;
   docs?: any;
-  invokeThreshold?: number;
-  builtIn?: any;
+  resolveThreshold?: number;
 }
 
 export default IProcessorOptions;

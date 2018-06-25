@@ -1,14 +1,17 @@
 import IProcessorOptions from './IProcessorOptions';
 import IContextOptions from './IContextOptions';
-import IInvokeOptions from './IInvokeOptions';
+import { Context } from './Context';
+import IResolveOptions from './IResolveOptions';
+import { Resolver } from './Resolver';
 export default class Processor {
     private options;
-    private builtIn;
+    resolvers: Array<typeof Resolver>;
     constructor(options: IProcessorOptions);
-    readonly root: any;
     readonly docs: any;
-    readonly invokeThreshold: number;
-    invoke(options: IInvokeOptions): any;
-    private exec(func, options);
-    process(options: IContextOptions, client?: any): Promise<any>;
+    readonly resolveThreshold: number;
+    private isPrevent;
+    private findMethodFilter;
+    private findMethodInfo;
+    resolve(ctx: Context, options: IResolveOptions): any;
+    process(options: IContextOptions): Promise<any>;
 }

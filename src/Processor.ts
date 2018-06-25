@@ -1,65 +1,90 @@
-import yaml from './yaml';
 import IProcessorOptions from './IProcessorOptions';
 import IContextOptions from './IContextOptions';
 import { Context } from './Context';
-import IInvokeOptions from './IInvokeOptions';
+import IResolveOptions from './IResolveOptions';
+import { Resolver } from './Resolver';
 import BuiltIn from './builtIn';
+import { IMap } from './IMap';
 
 const debug = require('debug')('processor');
-const {
-  each, isString, isObject, isArray, getByPath, isFunction
-} = require('ntils');
+const { isNull, isObject, getByPath, isFunction } = require('ntils');
+
+const prevents = (() => {
+  const map: IMap = { prototype: true, arguments: true, caller: true };
+  Object.getOwnPropertyNames(({} as any).__proto__)
+    .forEach(name => map[name] = true);
+  return map;
+})();
 
 export default class Processor {
 
   private options: IProcessorOptions;
-  private builtIn: any;
+  public resolvers: Array<typeof Resolver> = [BuiltIn];
 
   constructor(options: IProcessorOptions) {
     this.options = Object.assign({}, options);
-    this.builtIn = new BuiltIn();
-    Object.assign(this.builtIn, this.options.builtIn);
-  }
-
-  public get root() {
-    return this.options.root || {};
+    this.resolvers.unshift(this.options.resolver);
+    debug('constructor', options);
   }
 
   public get docs() {
-    return this.options.docs || this.root.__docs__ || {};
+    const { docs, resolver } = this.options;
+    return docs || (resolver && resolver.docs) || {};
   }
 
-  public get invokeThreshold() {
-    return this.options.invokeThreshold || 100;
+  public get resolveThreshold() {
+    return this.options.resolveThreshold || 100;
   }
 
-  public invoke(options: IInvokeOptions): any {
-    const { method, params, metadata } = options;
-    //如果 action 是对象直接返回当作结果
-    if (isObject(method)) return method;
-    //如果是函数，执行并返回结果
-    if (isFunction(method)) return this.exec(method, options);
-    //如果是内建函数，执行内建函数并返回结果
-    const builtInFunc = getByPath(this.builtIn, method);
-    if (builtInFunc) return this.exec(builtInFunc, options);
-    //如果构造 processor 时指定了 invoke，调用 invoke 执行
-    const { invoke } = this.options;
-    if (invoke) return invoke(options);
-    //如果通过 root 挂载的函数，调用并返回结果
-    const func = getByPath(this.root, method);
-    return this.exec(func, options);
+  private isPrevent(value: any, name?: string) {
+    return (name && prevents[name]) || value instanceof Context ||
+      value instanceof Processor || value == Function.call ||
+      value == Function.bind || value == Function.apply;
   }
 
-  private exec(func: Function, options: IInvokeOptions) {
-    const { method, params } = options;
-    if (!func || !func.apply) {
-      throw new Error(`Cannt find method '${method}'`);
+  private findMethodFilter = (value: any, name: string) => {
+    return this.isPrevent(value, name) ? null : value;
+  }
+
+  private findMethodInfo(ctx: Context, method: string | Function) {
+    if (isFunction(method)) return { func: method, scope: null };
+    for (let i = 0; i < ctx.resolvers.length; i++) {
+      const resolver = ctx.resolvers[i];
+      if (!resolver) continue;
+      const path = (method as string).split('.');
+      const name = path.pop();
+      const scope = getByPath(resolver, path.join('.'),
+        this.findMethodFilter);
+      if (!scope || this.isPrevent(scope)) continue;
+      const func = scope[name];
+      if (!func || !isFunction(func) || this.isPrevent(func, name)) continue;
+      return { func, scope };
     }
-    return func.apply(options, Object.values(params));
   }
 
-  public async process(options: IContextOptions, client?: any) {
-    const context = new Context(this, options, client);
+  public resolve(ctx: Context, options: IResolveOptions): any {
+    const { method, params } = options;
+    debug('resolve', options);
+    //如果 action 是对象直接返回当作结果
+    if (isObject(method) || isNull(method)) return method;
+    //如果是函数直接执行，并返回结果，然后从 resolver 上查找，如果找到执行并返回
+    const methodInfo = this.findMethodInfo(ctx, method);
+    if (methodInfo) {
+      const { func, scope } = methodInfo;
+      const values = Object.values(params);
+      return func.call(scope, values);
+    }
+    //如果构造 processor 时指定了 resolve resolve 执行
+    if (this.options.resolve) {
+      return this.options.resolve(ctx, options);
+    }
+    //抛出找不到 resolve 方法的异常
+    throw new Error(`Cannt find method '${method}'`);
+  }
+
+  public async process(options: IContextOptions) {
+    debug('process', options);
+    const context = new Context(this, options);
     return context.execute();
   }
 

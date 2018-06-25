@@ -2,23 +2,51 @@ import Processor from './Processor';
 import IContextOptions from './IContextOptions';
 import yaml from './yaml';
 import IMap from './IMap';
+import { IResolveOptions } from './IResolveOptions';
+import { Resolver } from './Resolver';
 
 const debug = require('debug')('context');
-const {
-  each, isString, isObject, isArray, getByPath, setByPath, isNull, isFunction
-} = require('ntils');
+const { each, isString, isObject, isArray,
+  getByPath, setByPath, isNull, isFunction } = require('ntils');
 
 export class Context {
 
-  private processor: Processor;
-  private options: IContextOptions;
-  private client: any;
-  private invokeCount: number = 0;
+  private __processor: Processor;
+  private __options: IContextOptions;
+  private __resolveCount: number = 0;
+  private __resolvers: Array<Resolver> = [];
 
-  constructor(processor: Processor, options: IContextOptions, client: any) {
-    this.processor = processor;
-    this.client = client;
-    this.options = options;
+  constructor(processor: Processor, options: IContextOptions) {
+    this.__processor = processor;
+    this.__options = options;
+    this.createResolvers();
+    debug('constructor', options);
+  }
+
+  public get processor() {
+    return this.__processor
+  }
+
+  public get options() {
+    return this.__options;
+  }
+
+  public get metadata() {
+    return this.options.metadata;
+  }
+
+  public get client() {
+    return this.options.client;
+  }
+
+  public get resolvers() {
+    return this.__resolvers;
+  }
+
+  private createResolvers() {
+    const { resolvers } = this.processor;
+    this.__resolvers = resolvers.map(resolver => new resolver(this));
+    debug('createResolvers', (this.__resolvers[0] as any).users);
   }
 
   private isVariable(val: any): boolean {
@@ -44,7 +72,7 @@ export class Context {
    * @param variables 所有变量
    * @param path 值路径
    */
-  getVarValue(variables: any, path: string) {
+  private getVarValue(variables: any, path: string) {
     if (path == '.') {
       const newVaribles = Object.assign({}, variables);
       delete newVaribles['@'];
@@ -85,23 +113,22 @@ export class Context {
    * @param operation 动作描述对象
    * @param variables 所有变量
    */
-  private async invokeAction(operation: any, variables: any) {
-    this.invokeCount++;
-    const { invokeThreshold } = this.processor;
-    if (this.invokeCount > invokeThreshold) {
-      throw new Error(`Invoke exceeds the maximum limit ${invokeThreshold}.`);
+  private async resolveAction(operation: any, variables: any) {
+    this.__resolveCount++;
+    const { resolveThreshold } = this.processor;
+    if (this.__resolveCount > resolveThreshold) {
+      throw new Error(`Resolve exceeds the maximum limit ${resolveThreshold}.`);
     }
     const { action, params, fields } = operation;
     const paramValues = this.getParams(params, variables) || {};
     const { metadata } = this.options;
     const metadataObj = metadata ?
       (isString(metadata) ? JSON.parse(metadata as string) : metadata) : {};
-    const invokeOpts = {
-      method: action, params: paramValues,
-      metadata: metadataObj, client: this.client
+    const resolveOpts: IResolveOptions = {
+      method: action, params: paramValues
     };
-    const result = await this.processor.invoke(invokeOpts);
-    return fields ? this.convertResult(result, fields, variables) : result;
+    const result = await this.processor.resolve(this, resolveOpts);
+    return fields ? this.resolve(result, fields, variables) : result;
   }
 
   /**
@@ -116,7 +143,7 @@ export class Context {
    * @param dst 
    * @param variables 
    */
-  private async convertField(srcObj: any, src: any,
+  private async resolveField(srcObj: any, src: any,
     dstObj: any, dst: string, variables: any) {
     //生成的新的变量查找对象，@ 指定当前要处理的源对象
     //所有 . 开头的表达式，会被转换为从 @ 查找
@@ -133,7 +160,7 @@ export class Context {
         const val = getByPath(srcObj, dst);
         src.action = isFunction(val) ? {} : val || {};
       }
-      return this.invokeAction(src, scopedVaribles);
+      return this.resolveAction(src, scopedVaribles);
     } else {
       return getByPath(srcObj, String(src));
     }
@@ -148,9 +175,9 @@ export class Context {
    * @param vars 
    * @param ignores 要忽略的 key
    */
-  private async createFieldConvertTask(srcObj: any, src: any,
+  private async createFieldResolveTask(srcObj: any, src: any,
     dstObj: any, dst: string, vars: any, ignores: Array<string>) {
-    let val = await this.convertField(srcObj, src, dstObj, dst, vars);
+    let val = await this.resolveField(srcObj, src, dstObj, dst, vars);
     if (dst === '.' && isObject(val)) {
       //如果目标表达式是 . 且 src 的值是 object ，则复制生个 key
       each(val, (key: string, value: any) => {
@@ -174,7 +201,7 @@ export class Context {
    * @param fields 要处理的字段映射
    * @param vars 所有变量
    */
-  private async convertObj(srcObj: any, fields: any, vars: any) {
+  private async resolveObj(srcObj: any, fields: any, vars: any) {
     if (!isObject(srcObj)) return srcObj;
     const dstObj: any = {};
     const pendings: Array<Promise<any>> = [];
@@ -184,7 +211,7 @@ export class Context {
       if (/^~/.test(dst)) return;
       if (isNull(src) || src === true) src = dst;
       if (src === false) ignores.push(dst);
-      pendings.push(this.createFieldConvertTask(
+      pendings.push(this.createFieldResolveTask(
         srcObj, src, dstObj, dst, vars, ignores
       ));
     });
@@ -199,15 +226,15 @@ export class Context {
    * @param fields 要处理的字段映射
    * @param vars 所有变量
    */
-  private convertResult(result: any, fields: any, vars: any) {
+  private resolve(result: any, fields: any, vars: any) {
     if (!result || (!isObject(result) && !isArray(result))) {
       return result;
     }
     if (isArray(result)) {
       return Promise.all((result as Array<any>)
-        .map(item => this.convertObj(item, fields, vars)));
+        .map(item => this.resolveObj(item, fields, vars)));
     }
-    return this.convertObj(result, fields, vars);
+    return this.resolveObj(result, fields, vars);
   }
 
   /**
@@ -216,12 +243,13 @@ export class Context {
    * 最后，返回的是完全处理好的结果对象
    */
   execute() {
+    debug('execute', this.options);
     const { operation, variables } = this.options;
     const operationObj = operation ?
       (isString(operation) ? yaml.parse(operation as string) : operation) : {};
     const variablesObj = variables ?
       (isString(variables) ? JSON.parse(variables as string) : variables) : {};
-    return this.convertResult({}, operationObj, variablesObj);
+    return this.resolve({}, operationObj, variablesObj);
   }
 
 }

@@ -1,6 +1,6 @@
 import IMap from './IMap';
-export interface IInvokeOptions {
+export interface IResolveOptions {
     method: string | Function | any;
     params: IMap | Array<any>;
 }
-export default IInvokeOptions;
+export default IResolveOptions;

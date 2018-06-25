@@ -4,7 +4,7 @@ init:
 dev:
   - name: shell
     script:
-      - DEBUG=field,debug ts-node ./src/debug.ts
+      - DEBUG=processor,context,debug ts-node ./src/debug.ts
 
 build:
   - name: shell
