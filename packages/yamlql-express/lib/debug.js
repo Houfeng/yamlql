@@ -4,8 +4,8 @@ const express = require("express");
 const index_1 = require("./index");
 const options = {
     processor: {
-        root: {
-            getUser(id) {
+        resolver: {
+            getUser(ctx, id) {
                 return {
                     code: 200,
                     data: { userId: id, userName: '用户' + id, userAge: id }

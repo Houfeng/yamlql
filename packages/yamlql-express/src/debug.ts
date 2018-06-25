@@ -1,10 +1,11 @@
 import * as express from 'express';
 import yqlExpress from './index';
+import { Context } from 'yamlql';
 
 const options = {
   processor: {
-    root: {
-      getUser(id: string) {
+    resolver: {
+      getUser(ctx: Context, id: string) {
         return {
           code: 200,
           data: { userId: id, userName: '用户' + id, userAge: id }

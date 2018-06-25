@@ -24,7 +24,7 @@ function middleware(options) {
     //处理响应
     function process(client, data, next, jsonpCallback) {
         client.res.setHeader('Content-Type', 'application/json');
-        return processor.process(data, client).then(result => {
+        return processor.process(Object.assign({}, data, { client })).then(result => {
             client.res.send(stringify(result, jsonpCallback));
             next();
         }).catch(err => {

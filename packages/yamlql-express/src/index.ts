@@ -41,7 +41,7 @@ export default function middleware(options: IServerOptions): RequestHandler {
   function process(client: Client, data: any,
     next?: NextFunction, jsonpCallback?: string) {
     client.res.setHeader('Content-Type', 'application/json');
-    return processor.process(data, client).then(result => {
+    return processor.process({ ...data, client }).then(result => {
       client.res.send(stringify(result, jsonpCallback));
       next();
     }).catch(err => {
