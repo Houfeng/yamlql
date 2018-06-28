@@ -15,6 +15,6 @@ export default class Processor {
     isResolver(obj: any): boolean;
     isProcessor(obj: any): boolean;
     isContext(obj: any): boolean;
-    resolve(ctx: Context, options: IResolveOptions): any;
+    resolve(ctx: Context, options: IResolveOptions, ...others: Array<any>): any;
     process(options: IContextOptions): Promise<any>;
 }
