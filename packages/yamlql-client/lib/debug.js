@@ -38,7 +38,8 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("./index");
 var client = new index_1.default({
-    endpoint: 'https://query.aliyun.com/yamlql'
+    endpoint: 'http://local.aliyun.com:7001/yamlql',
+    metadata: { QKEY_NAME: 'demo', QKEY_VALUE: 'e00bb831-d1a2-1165-dfea-7ddf9b091e6d' },
 });
 (function () { return __awaiter(_this, void 0, void 0, function () {
     var rs, err_1;
@@ -46,14 +47,14 @@ var client = new index_1.default({
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, client.exec(" \n  data:\n    action: demos.users\n  ")];
+                return [4 /*yield*/, client.exec('./demo')];
             case 1:
                 rs = _a.sent();
                 console.log('成功', rs);
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
-                console.error('成功', err_1);
+                console.error('失败', err_1);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

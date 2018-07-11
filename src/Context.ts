@@ -17,13 +17,21 @@ export class Context {
   private __resolvers: Array<Resolver | any> = [];
 
   constructor(processor: Processor, options: IContextOptions) {
-    options.operation = options.operation || {};
-    options.variables = options.variables || {};
-    options.metadata = options.metadata || {};
+    this.__options = this.convertOptions(options);
     this.__processor = processor;
-    this.__options = options;
     this.createResolvers();
     debug('constructor', options);
+  }
+
+  private convertOptions(opts: IContextOptions): IContextOptions {
+    let { operation, variables, metadata, ...others } = opts;
+    operation = operation || Object.create(null);
+    variables = variables || Object.create(null);
+    metadata = metadata || Object.create(null);
+    if (isString(operation)) operation = yaml.parse(operation as string);
+    if (isString(variables)) variables = JSON.parse(variables as string);
+    if (isString(metadata)) metadata = JSON.parse(metadata as string);
+    return { operation, variables, metadata, ...others };
   }
 
   public get processor() {
@@ -249,11 +257,7 @@ export class Context {
   execute() {
     debug('execute', this.options);
     const { operation, variables } = this.options;
-    const operationObj = operation ?
-      (isString(operation) ? yaml.parse(operation as string) : operation) : {};
-    const variablesObj = variables ?
-      (isString(variables) ? JSON.parse(variables as string) : variables) : {};
-    return this.resolve({}, operationObj, variablesObj);
+    return this.resolve({}, operation, variables);
   }
 
 }

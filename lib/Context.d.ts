@@ -6,6 +6,7 @@ export declare class Context {
     private __resolveCount;
     private __resolvers;
     constructor(processor: Processor, options: IContextOptions);
+    private convertOptions;
     readonly processor: Processor;
     readonly options: IContextOptions;
     readonly metadata: any;
