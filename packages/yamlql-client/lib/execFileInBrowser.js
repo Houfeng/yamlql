@@ -35,31 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var execQuery_1 = require("./execQuery");
-var execFile_1 = require("./execFile");
-var YamlQlClient = /** @class */ (function () {
-    function YamlQlClient(opiotns) {
-        var _this = this;
-        this.execQuery = function (query, variables, options) {
-            var opts = Object.assign({}, _this.opiotns, options);
-            return execQuery_1.execQuery(query, variables, opts);
-        };
-        this.execFile = function (queryFile, variables, options) { return __awaiter(_this, void 0, void 0, function () {
-            var opts;
-            return __generator(this, function (_a) {
-                opts = Object.assign({}, this.opiotns, options);
-                return [2 /*return*/, execFile_1.execFile(queryFile, variables, opts)];
-            });
-        }); };
-        this.exec = function (query, variables, options) {
-            return query.startsWith('./') || query.startsWith('/') ?
-                _this.execFile(query, variables, options) :
-                _this.execQuery(query, variables, options);
-        };
-        this.opiotns = opiotns;
-    }
-    return YamlQlClient;
-}());
-exports.YamlQlClient = YamlQlClient;
-exports.default = YamlQlClient;
-//# sourceMappingURL=index.js.map
+function execFile(queryFile, variables, options) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            throw new Error("Do not execute the file \"" + queryFile + "\" in the browser");
+        });
+    });
+}
+exports.execFile = execFile;
+//# sourceMappingURL=execFileInBrowser.js.map

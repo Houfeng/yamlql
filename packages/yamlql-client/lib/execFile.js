@@ -35,31 +35,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var fs = require("fs");
+var path = require("path");
 var execQuery_1 = require("./execQuery");
-var execFile_1 = require("./execFile");
-var YamlQlClient = /** @class */ (function () {
-    function YamlQlClient(opiotns) {
-        var _this = this;
-        this.execQuery = function (query, variables, options) {
-            var opts = Object.assign({}, _this.opiotns, options);
-            return execQuery_1.execQuery(query, variables, opts);
-        };
-        this.execFile = function (queryFile, variables, options) { return __awaiter(_this, void 0, void 0, function () {
-            var opts;
-            return __generator(this, function (_a) {
-                opts = Object.assign({}, this.opiotns, options);
-                return [2 /*return*/, execFile_1.execFile(queryFile, variables, opts)];
-            });
-        }); };
-        this.exec = function (query, variables, options) {
-            return query.startsWith('./') || query.startsWith('/') ?
-                _this.execFile(query, variables, options) :
-                _this.execQuery(query, variables, options);
-        };
-        this.opiotns = opiotns;
-    }
-    return YamlQlClient;
-}());
-exports.YamlQlClient = YamlQlClient;
-exports.default = YamlQlClient;
-//# sourceMappingURL=index.js.map
+delete require.cache[__filename];
+var parentFile = module.parent.filename;
+var parentDir = path.dirname(parentFile);
+function readFile(filename) {
+    return new Promise(function (resolve, reject) {
+        fs.readFile(filename, { encoding: 'utf-8' }, function (err, data) {
+            if (err)
+                return reject(err);
+            resolve(data);
+        });
+    });
+}
+function execFile(queryFile, variables, options) {
+    return __awaiter(this, void 0, void 0, function () {
+        var filename, operation;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!queryFile.endsWith('.yql'))
+                        queryFile += '.yql';
+                    filename = path.resolve(parentDir, queryFile);
+                    return [4 /*yield*/, readFile(filename)];
+                case 1:
+                    operation = _a.sent();
+                    return [2 /*return*/, execQuery_1.execQuery(operation, variables, options)];
+            }
+        });
+    });
+}
+exports.execFile = execFile;
+//# sourceMappingURL=execFile.js.map

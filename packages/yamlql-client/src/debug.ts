@@ -1,4 +1,4 @@
-import Client from './index';
+import Client from '.';
 
 const client = new Client({
   endpoint: 'https://query.aliyun.com/yamlql/',

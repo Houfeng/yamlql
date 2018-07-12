@@ -36,10 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = require("./index");
-var client = new index_1.default({
-    endpoint: 'http://local.aliyun.com:7001/yamlql',
-    metadata: { QKEY_NAME: 'demo', QKEY_VALUE: 'e00bb831-d1a2-1165-dfea-7ddf9b091e6d' },
+var _1 = require(".");
+var client = new _1.default({
+    endpoint: 'https://query.aliyun.com/yamlql/',
+    metadata: { QKEY_NAME: 'demo', QKEY_VALUE: 'ea0cac65-6a6c-5e3f-7b5c-62e09bd7587b' },
 });
 (function () { return __awaiter(_this, void 0, void 0, function () {
     var rs, err_1;
