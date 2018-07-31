@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { IClientOptions } from './IClientOptions';
 
-axios.defaults.withCredentials = true;
+const instance = axios.create({
+  xsrfCookieName: 'QXSRF-TOKEN',
+  xsrfHeaderName: 'QXSRF-TOKEN',
+  withCredentials: true,
+});
 
 export function execQuery(query: string, variables?: any,
   options?: IClientOptions) {
@@ -11,5 +15,5 @@ export function execQuery(query: string, variables?: any,
     variables: JSON.stringify(variables),
     metadata: JSON.stringify(metadata)
   };
-  return axios.post(endpoint, data, options as any).then(rs => rs.data);
+  return instance.post(endpoint, data, options as any).then(rs => rs.data);
 }
