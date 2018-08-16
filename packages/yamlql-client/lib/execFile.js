@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -39,8 +39,8 @@ var fs = require("fs");
 var path = require("path");
 var execQuery_1 = require("./execQuery");
 delete require.cache[__filename];
-var parentFile = module.parent.filename;
-var parentDir = path.dirname(parentFile);
+var callerFile = module.parent.parent.filename;
+var callerDir = path.dirname(callerFile);
 function readFile(filename) {
     return new Promise(function (resolve, reject) {
         fs.readFile(filename, { encoding: 'utf-8' }, function (err, data) {
@@ -58,7 +58,7 @@ function execFile(queryFile, variables, options) {
                 case 0:
                     if (!queryFile.endsWith('.yql'))
                         queryFile += '.yql';
-                    filename = path.resolve(parentDir, queryFile);
+                    filename = path.resolve(callerDir, queryFile);
                     return [4 /*yield*/, readFile(filename)];
                 case 1:
                     operation = _a.sent();
