@@ -17,9 +17,9 @@ export class YamlQlClient {
   }
 
   execFile = async (queryFile: string, variables?: any,
-    options?: IClientOptions) => {
+    options?: IClientOptions, resolveDir?: string) => {
     const opts = Object.assign({}, this.opiotns, options);
-    return execFile(queryFile, variables, opts);
+    return execFile(queryFile, variables, opts, resolveDir);
   }
 
   exec = (query: string, variables?: any, options?: IClientOptions) => {

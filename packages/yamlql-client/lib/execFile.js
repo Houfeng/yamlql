@@ -59,6 +59,7 @@ function execFile(queryFile, variables, options, resolveDir) {
                 case 0:
                     if (!queryFile.endsWith('.yql'))
                         queryFile += '.yql';
+                    resolveDir = resolveDir || callerDir;
                     filename = path.resolve(resolveDir, queryFile);
                     return [4 /*yield*/, readFile(filename)];
                 case 1:

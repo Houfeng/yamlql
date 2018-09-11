@@ -44,11 +44,11 @@ var YamlQlClient = /** @class */ (function () {
             var opts = Object.assign({}, _this.opiotns, options);
             return execQuery_1.execQuery(query, variables, opts);
         };
-        this.execFile = function (queryFile, variables, options) { return __awaiter(_this, void 0, void 0, function () {
+        this.execFile = function (queryFile, variables, options, resolveDir) { return __awaiter(_this, void 0, void 0, function () {
             var opts;
             return __generator(this, function (_a) {
                 opts = Object.assign({}, this.opiotns, options);
-                return [2 /*return*/, execFile_1.execFile(queryFile, variables, opts)];
+                return [2 /*return*/, execFile_1.execFile(queryFile, variables, opts, resolveDir)];
             });
         }); };
         this.exec = function (query, variables, options) {
