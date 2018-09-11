@@ -17,9 +17,9 @@ function readFile(filename: string): Promise<string> {
 }
 
 export async function execFile(queryFile: string, variables?: any,
-  options?: IClientOptions) {
+  options?: IClientOptions, resolveDir: string = callerDir) {
   if (!queryFile.endsWith('.yql')) queryFile += '.yql';
-  const filename = path.resolve(callerDir, queryFile);
+  const filename = path.resolve(resolveDir, queryFile);
   const operation = await readFile(filename);
   return execQuery(operation, variables, options);
 }

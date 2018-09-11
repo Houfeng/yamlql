@@ -50,7 +50,8 @@ function readFile(filename) {
         });
     });
 }
-function execFile(queryFile, variables, options) {
+function execFile(queryFile, variables, options, resolveDir) {
+    if (resolveDir === void 0) { resolveDir = callerDir; }
     return __awaiter(this, void 0, void 0, function () {
         var filename, operation;
         return __generator(this, function (_a) {
@@ -58,7 +59,7 @@ function execFile(queryFile, variables, options) {
                 case 0:
                     if (!queryFile.endsWith('.yql'))
                         queryFile += '.yql';
-                    filename = path.resolve(callerDir, queryFile);
+                    filename = path.resolve(resolveDir, queryFile);
                     return [4 /*yield*/, readFile(filename)];
                 case 1:
                     operation = _a.sent();
