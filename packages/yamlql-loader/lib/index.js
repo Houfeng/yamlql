@@ -6,8 +6,8 @@ const os = require('os');
 const IMPORT_REGEXP = /^#\s*(import|include|require)\s*(\'|\")(.+?)(\'|\")/;
 const ENDPOINT_REGEXP = /^#\s*(endpoint|url|api)\s*(\'|\")(.+?)(\'|\")/;
 const EXTENSIONS = ['.yql', '.yamlql'];
-const HANDLER_PATH = require.resolve('./handler');
-const REQUEST_PATH = require.resolve('./request');
+const HANDLER_PATH = path.normalize(require.resolve('./handler'));
+const REQUEST_PATH = path.normalize(require.resolve('./request'));
 const DEFAULT_ENDPOINT = '/yamlql';
 
 function getFile(cwd, filePath, options, tryExts) {
@@ -75,8 +75,8 @@ function loader(source) {
     return `module.exports = ${operation}`;
   } else {
     return `//YamlQL
-var req = require('${options.request}');
-var handler = require('${HANDLER_PATH}');
+var req = require('${options.request.replace(/\\/g, '\\\\')}');
+var handler = require('${HANDLER_PATH.replace(/\\/g, '\\\\')}');
 module.exports = function (variables, options, metadata) {
   return handler(req, ${endpoint}, ${operation}, variables, options, metadata);
 };`
