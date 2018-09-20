@@ -1,2 +1,4 @@
 data:
-  action: demos.users
+  action: dc.service.git.search-user
+  params:
+    keyword: $key
