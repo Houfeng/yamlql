@@ -64,7 +64,7 @@ export class Context {
   private isVariable(val: any): boolean {
     if (!isString(val)) return false;
     const str = val as string;
-    return /^\$/.test(str) || /^\./.test(str);
+    return str.startsWith('$') || str.startsWith('.');
   }
 
   private trimVariable(name: any): string {
@@ -73,9 +73,9 @@ export class Context {
     //$代表取整个变量对象
     if (str === '$') return '.';
     //.代表取当前结果对象
-    if (/^\./.test(str)) return '@' + str;
+    if (str.startsWith('.')) return '@' + str;
     //普通变量
-    if (/^\$/.test(str)) return str.slice(1);
+    if (str.startsWith('$')) return str.slice(1);
     return name;
   }
 
@@ -102,7 +102,7 @@ export class Context {
       return this.getVarValue(variables, this.trimVariable(params));
     } else if (isString(params)) {
       let str = params as string;
-      if (/^\=/.test(str)) str = str.slice(1);
+      if (str.startsWith('=')) str = str.slice(1);
       return str;
     } else if (!isObject(params) && !isArray(params)) {
       return params;
@@ -220,7 +220,7 @@ export class Context {
     const ignores: Array<string> = [];
     each(fields, (dst: string, src: any) => {
       //所有 ~ 开头的 field 不进行处理，用于存在公用判读，并通过 yaml 语法引用
-      if (/^~/.test(dst)) return;
+      if (dst.startsWith('~')) return;
       if (isNull(src) || src === true) src = dst;
       if (src === false) ignores.push(dst);
       pendings.push(this.createFieldResolveTask(

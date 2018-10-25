@@ -1,13 +1,14 @@
 //handler 的目的是让每个编译后的函数小一些，公共处理在 handler 中
-module.exports = function (request, url, operation, variables, options, metadata) {
+module.exports = function (request, endpoint, operation,
+  variables, options, metadata) {
   options = options || {};
   metadata = metadata || options.metadata;
   request = request.default || request;
-  url = options.url || url;
+  endpoint = options.endpoint || endpoint;
   var data = {
     operation: operation,
     variables: JSON.stringify(variables),
     metadata: JSON.stringify(metadata)
   };
-  return request(url, data, options);
+  return request(endpoint, data, options);
 };
