@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const _ = require('lodash');
 const os = require('os');
+const { safeLoad } = require('js-yaml');
 
 const IMPORT_REGEXP = /^#\s*(import|include|require)\s*(\'|\")(.+?)(\'|\")/;
 const ENDPOINT_REGEXP = /^#\s*(endpoint|url|api)\s*(\'|\")(.+?)(\'|\")/;
@@ -67,7 +68,7 @@ function loader(source) {
   this.cacheable();
   const options = getOptions(this);
   const result = parse.call(this, this.context, source, options);
-  const operation = JSON.stringify(result.join(os.EOL));
+  const operation = JSON.stringify(safeLoad(result.join(os.EOL)));
   const endpoint = JSON.stringify(
     parseEndpoint(source) || options.url || options.endpoint
   );

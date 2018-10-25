@@ -7,8 +7,8 @@ module.exports = function (request, endpoint, operation,
   endpoint = options.endpoint || endpoint;
   var data = {
     operation: operation,
-    variables: JSON.stringify(variables),
-    metadata: JSON.stringify(metadata)
+    variables: variables,
+    metadata: metadata
   };
   return request(endpoint, data, options);
 };
