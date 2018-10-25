@@ -3,6 +3,7 @@ module.exports = function (request, url, operation, variables, options, metadata
   options = options || {};
   metadata = metadata || options.metadata;
   request = request.default || request;
+  url = options.url || url;
   var data = {
     operation: operation,
     variables: JSON.stringify(variables),
