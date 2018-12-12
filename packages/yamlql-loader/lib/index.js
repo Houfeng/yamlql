@@ -60,8 +60,8 @@ function getOptions(ctx) {
     request: REQUEST_PATH,
     root: ROOT_PATH
   });
-  options.request = path.resolve(CWD, options.request);
-  options.root = path.resolve(CWD, options.root);
+  options.request = path.resolve(CWD, path.normalize(options.request));
+  options.root = path.resolve(CWD, path.normalize(options.root));
   return options;
 }
 
