@@ -53,14 +53,16 @@ function parse(cwd, source, options) {
 }
 
 function getOptions(ctx) {
-  const options = ctx.loaders[ctx.loaderIndex].options || {};
-  return _.defaults(options, {
+  const options = _.defaults(ctx.loaders[ctx.loaderIndex].options || {}, {
     extensions: EXTENSIONS,
     string: false,
     endpoint: DEFAULT_ENDPOINT,
-    request: path.resolve(CWD, REQUEST_PATH),
-    root: path.resolve(CWD, ROOT_PATH)
+    request: REQUEST_PATH,
+    root: ROOT_PATH
   });
+  options.request = path.resolve(CWD, options.request);
+  options.root = path.resolve(CWD, options.root);
+  return options;
 }
 
 function parseEndpoint(source) {
