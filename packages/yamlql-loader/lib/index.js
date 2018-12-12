@@ -5,10 +5,13 @@ const os = require('os');
 const { safeLoad } = require('js-yaml');
 
 const IMPORT_REGEXP = /^#\s*(import|include|require)\s*(\'|\")(.+?)(\'|\")/;
-const ENDPOINT_REGEXP = /^#\s*(endpoint|url|api)\s*(\'|\")(.+?)(\'|\")/;
+const ENDPOINT_REGEXP = /^#\s*(endpoint|url|api)\s*(\'|\")(.+?)(\'|\")/m;
+const NAME_REGEXP = /^#\s*(name|id|)\s*(\'|\")(.+?)(\'|\")/m;
 const EXTENSIONS = ['.yql', '.yamlql'];
+const CWD = process.cwd();
 const HANDLER_PATH = path.normalize(require.resolve('./handler'));
 const REQUEST_PATH = path.normalize(require.resolve('./request'));
+const ROOT_PATH = path.normalize('./');
 const DEFAULT_ENDPOINT = '/yamlql';
 
 function getFile(cwd, filePath, options, tryExts) {
@@ -49,19 +52,49 @@ function parse(cwd, source, options) {
   return _.uniq(contents);
 }
 
-function parseEndpoint(source) {
-  const matchInfo = ENDPOINT_REGEXP.exec(source);
-  return matchInfo && matchInfo[3];
-}
-
 function getOptions(ctx) {
   const options = ctx.loaders[ctx.loaderIndex].options || {};
   return _.defaults(options, {
     extensions: EXTENSIONS,
     string: false,
     endpoint: DEFAULT_ENDPOINT,
-    request: REQUEST_PATH
+    request: path.resolve(CWD, REQUEST_PATH),
+    root: path.resolve(CWD, ROOT_PATH)
   });
+}
+
+function parseEndpoint(source) {
+  const matchInfo = ENDPOINT_REGEXP.exec(source);
+  return matchInfo && matchInfo[3];
+}
+
+function parseName(source) {
+  const matchInfo = NAME_REGEXP.exec(source);
+  return matchInfo && matchInfo[3];
+}
+
+function encodeName(name) {
+  name = name.replace(/\//g, '.').replace(/\\/g, '.');
+  if (name[0] === '.') name = name.substr(1);
+  return name;
+}
+
+function getName(ctx, options, source) {
+  const name = parseName(source);
+  if (name) return encodeName(name);
+  if (!ctx._module || !ctx._module.userRequest) return;
+  let filename = ctx._module.userRequest;
+  options.extensions.forEach(extname => {
+    filename = filename.replace(extname, '');
+  });
+  filename = filename.replace(options.root, '');
+  return encodeName(filename);
+}
+
+function getEndpoint(ctx, options, source) {
+  const endpoint = parseEndpoint(source) || options.url || options.endpoint;
+  const name = getName(ctx, options, source);
+  return name ? `${endpoint}?${name}` : endpoint;
 }
 
 function loader(source) {
@@ -69,9 +102,7 @@ function loader(source) {
   const options = getOptions(this);
   const result = parse.call(this, this.context, source, options);
   const operation = JSON.stringify(safeLoad(result.join(os.EOL)));
-  const endpoint = JSON.stringify(
-    parseEndpoint(source) || options.url || options.endpoint
-  );
+  const endpoint = JSON.stringify(getEndpoint(this, options, source));
   if (options.string) {
     return `module.exports = ${operation}`;
   } else {
