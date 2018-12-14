@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import * as React from 'react';
 import { InspectorModel, IInspectorOptions } from './models';
 import Editor from './Editor';

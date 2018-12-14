@@ -14,7 +14,7 @@ export declare class InspectorModel {
     showDocs: boolean;
     private saveStateTimer;
     constructor(options: IInspectorOptions);
-    private defaultRequest(url, data?);
+    private defaultRequest;
     setOptions(options?: IInspectorOptions): void;
     execute: () => Promise<any>;
     toggleDocs: () => void;

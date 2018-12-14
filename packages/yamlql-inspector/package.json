@@ -1,6 +1,6 @@
 {
   "name": "yamlql-inspector",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "",
   "main": "./build/js/inspector.js",
   "typings": "./build/index.d.ts",
@@ -14,6 +14,12 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "dn-middleware-browser-sync": "^0.1.0",
+    "dn-middleware-clean": "^1.0.2",
+    "dn-middleware-copy": "^0.2.7",
+    "dn-middleware-server": "^1.0.15",
+    "dn-middleware-typescript": "^2.0.8",
+    "dn-middleware-webpack": "^1.11.1",
     "nokit-handler-markdown": "^1.0.7"
   },
   "dependencies": {
