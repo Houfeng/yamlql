@@ -57,9 +57,9 @@ export default class Editor extends React.Component<IEditorPorps, any> {
     const { fullscreenLabels: labels = ['进入全屏', '退出全屏'] } = this.props;
     const { fullscreen } = this.state;
     return <span style={{
-      position: 'absolute', zIndex: 1, bottom: 6, right: 20,
-      fontSize: '12px', cursor: 'pointer', padding: '2px 5px',
-      background: '#e3e3e3', borderRadius: '3px', opacity: .5
+      position: 'absolute', zIndex: 1, bottom: 6, right: 20, fontSize: '12px',
+      cursor: 'pointer', padding: '5px', lineHeight: '100%', opacity: .5,
+      background: '#e3e3e3', borderRadius: '3px',
     }} onClick={this.toggleFullscreen}>
       {fullscreen ? labels[1] : labels[0]}
     </span>;
