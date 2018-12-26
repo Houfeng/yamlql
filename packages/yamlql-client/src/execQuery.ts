@@ -7,13 +7,10 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-export function execQuery(query: string, variables?: any,
+export function execQuery(operation: string | any, variables?: any,
   options?: IClientOptions) {
   const { endpoint = '/yamlql', metadata } = options;
-  const data = {
-    operation: query,
-    variables: JSON.stringify(variables),
-    metadata: JSON.stringify(metadata)
-  };
-  return instance.post(endpoint, data, options as any).then(rs => rs.data);
+  const data = { operation, variables, metadata };
+  return instance.post(endpoint, data, options as any)
+    .then(rs => rs.data);
 }

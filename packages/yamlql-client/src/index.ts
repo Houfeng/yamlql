@@ -2,6 +2,7 @@ import { IClientOptions } from './IClientOptions';
 import { execQuery } from './execQuery';
 import { execFile } from './execFile';
 
+const { isString } = require('ntils');
 
 export class YamlQlClient {
   private opiotns: IClientOptions;
@@ -22,8 +23,10 @@ export class YamlQlClient {
     return execFile(queryFile, variables, opts, resolveDir);
   }
 
-  exec = (query: string, variables?: any, options?: IClientOptions) => {
-    return query.startsWith('./') || query.startsWith('/') ?
+  exec = (query: string | any, variables?: any, options?: IClientOptions) => {
+    const isQueryFile = isString(query) &&
+      (query.startsWith('./') || query.startsWith('/'));
+    return isQueryFile ?
       this.execFile(query, variables, options) :
       this.execQuery(query, variables, options);
   }

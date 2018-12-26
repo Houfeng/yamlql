@@ -4,6 +4,6 @@ export declare class YamlQlClient {
     constructor(opiotns: IClientOptions);
     execQuery: (query: string, variables?: any, options?: IClientOptions) => Promise<any>;
     execFile: (queryFile: string, variables?: any, options?: IClientOptions, resolveDir?: string) => Promise<any>;
-    exec: (query: string, variables?: any, options?: IClientOptions) => Promise<any>;
+    exec: (query: any, variables?: any, options?: IClientOptions) => Promise<any>;
 }
 export default YamlQlClient;

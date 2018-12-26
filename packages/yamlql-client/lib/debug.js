@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -40,7 +40,7 @@ var _1 = require(".");
 var client = new _1.default({
     endpoint: 'https://query.aliyun.com/yamlql/',
     metadata: {
-        QKEY_NAME: 'demo', QKEY_VALUE: 'ea0cac65-6a6c-5e3f-7b5c-62e09bd7587b'
+        QKEY_NAME: 'cli', QKEY_VALUE: 'ab7dbebf-5959-d661-c00c-e948bcb66cde'
     },
 });
 (function () { return __awaiter(_this, void 0, void 0, function () {
@@ -49,7 +49,7 @@ var client = new _1.default({
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, client.exec('./demo')];
+                return [4 /*yield*/, client.exec({ data: { action: 'houfeng.ywZigsYtv' } })];
             case 1:
                 rs = _a.sent();
                 console.log('成功', rs);
