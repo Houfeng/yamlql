@@ -1,6 +1,6 @@
 {
   "name": "yamlql-koa",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
@@ -10,19 +10,19 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "yamlql": "^0.2.2",
-    "yamlql-inspector": "^1.0.0",
     "body-parser": "^1.18.2",
     "debug": "^3.1.0",
     "express": "^4.16.2",
     "impress-router": "^1.5.0",
-    "koa": "^2.5.0",
+    "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.4.0",
     "koa-send": "^4.1.3",
     "koa-static": "^4.0.2",
     "ntils": "^4.0.0",
-    "require-dir": "^1.0.0"
+    "require-dir": "^1.0.0",
+    "yamlql": "^0.2.2",
+    "yamlql-inspector": "^1.0.0"
   },
   "devDependencies": {
     "@types/body-parser": "^1.16.8",
@@ -36,8 +36,9 @@
     "@types/koa-static": "^4.0.0",
     "@types/node": "^9.4.6",
     "@types/require-dir": "^0.3.0",
+    "dn-middleware-shell": "^1.1.0",
     "nodemon": "^1.17.1",
     "ts-node": "^4.1.0",
-    "typescript": "^2.7.1"
+    "typescript": "^3.2.2"
   }
 }
