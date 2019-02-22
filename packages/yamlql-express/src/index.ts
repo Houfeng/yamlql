@@ -32,7 +32,7 @@ export default function middleware(options: IServerOptions): RequestHandler {
   const processor = new Processor(options.processor);
 
   //序列化
-  function stringify(data: any, jsonpCallback?: string) {
+  function wrapResult(data: any, jsonpCallback?: string) {
     const text = JSON.stringify(data);
     return jsonpCallback ? `${jsonpCallback}(${text})` : text;
   }
@@ -42,10 +42,10 @@ export default function middleware(options: IServerOptions): RequestHandler {
     next?: NextFunction, jsonpCallback?: string) {
     client.res.setHeader('Content-Type', 'application/json');
     return processor.process({ ...data, client }).then(result => {
-      client.res.send(stringify(result, jsonpCallback));
+      client.res.send(wrapResult(result, jsonpCallback));
       next();
     }).catch(err => {
-      client.res.send(stringify(new YamlQLError(err), jsonpCallback));
+      client.res.send(wrapResult(new YamlQLError(err), jsonpCallback));
       next(err);
     });
   }

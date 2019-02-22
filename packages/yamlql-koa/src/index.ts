@@ -19,10 +19,9 @@ export default function middleware(options: IServerOptions) {
   const { jsonpCallbackName, onReady, errorStack } = options;
   const processor = new Processor(options.processor);
 
-  //序列化
-  function stringify(data: any, jsonpCallback?: string) {
-    const text = JSON.stringify(data);
-    return jsonpCallback ? `${jsonpCallback}(${text})` : text;
+  //包装返回结果
+  function wrapResult(data: any, jsonpCallback?: string) {
+    return jsonpCallback ? `${jsonpCallback}(${JSON.stringify(data)})` : data;
   }
 
   //处理响应
@@ -31,10 +30,10 @@ export default function middleware(options: IServerOptions) {
     ctx.set('Content-Type', 'application/json');
     try {
       const result = await processor.process({ ...data, client: ctx });
-      ctx.body = stringify(result, jsonpCallback);
+      ctx.body = wrapResult(result, jsonpCallback);
       next();
     } catch (err) {
-      ctx.body = stringify(new YamlQLError(err), jsonpCallback);
+      ctx.body = wrapResult(new YamlQLError(err), jsonpCallback);
       next(err);
     }
   }
