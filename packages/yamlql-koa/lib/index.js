@@ -9,21 +9,20 @@ function middleware(options) {
     const router = new Router();
     const { jsonpCallbackName, onReady, errorStack } = options;
     const processor = new yamlql_1.Processor(options.processor);
-    //序列化
-    function stringify(data, jsonpCallback) {
-        const text = JSON.stringify(data);
-        return jsonpCallback ? `${jsonpCallback}(${text})` : text;
+    //包装返回结果
+    function wrapResult(data, jsonpCallback) {
+        return jsonpCallback ? `${jsonpCallback}(${JSON.stringify(data)})` : data;
     }
     //处理响应
     async function process(ctx, data, next, jsonpCallback) {
         ctx.set('Content-Type', 'application/json');
         try {
             const result = await processor.process(Object.assign({}, data, { client: ctx }));
-            ctx.body = stringify(result, jsonpCallback);
+            ctx.body = wrapResult(result, jsonpCallback);
             next();
         }
         catch (err) {
-            ctx.body = stringify(new yamlql_1.YamlQLError(err), jsonpCallback);
+            ctx.body = wrapResult(new yamlql_1.YamlQLError(err), jsonpCallback);
             next(err);
         }
     }
