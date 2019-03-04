@@ -17,7 +17,7 @@ export default class BuiltIn extends Resolver {
     __number(str: string): number;
     __string(obj: any): any;
     __boolean(obj: any): boolean;
-    __date(obj: any, format?: string): any;
+    __date(date: any, format?: string): any;
     __parse(str: string): any;
     __stringify(obj: any): string;
     __merge(...args: Array<any>): any;

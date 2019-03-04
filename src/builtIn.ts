@@ -93,8 +93,7 @@ export default class BuiltIn extends Resolver {
     return Boolean(obj);
   }
 
-  public __date(obj: any, format?: string) {
-    const date = new Date(obj);
+  public __date(date: any, format?: string) {
     return format ? formatDate(date, format) : date;
   }
 
