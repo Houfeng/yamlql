@@ -14,6 +14,7 @@ export interface IEditorPorps {
   value?: string;
   readOnly?: boolean;
   onChange?: (val: string) => void;
+  onReady?: (editor: any) => void;
   getShortcuts?: () => IShortcut[];
   fullscreenLabels?: string[];
 }
@@ -79,9 +80,11 @@ export default class Editor extends React.Component<IEditorPorps, any> {
     await sleep(0);
     const { editor } = this;
     if (!editor) return;
+    const { onReady } = this.props;
     editor.getModel().updateOptions({ tabSize: 2 });
     editor.layout();
     this.applyShortcuts(editor);
+    if (onReady) onReady(this);
   }
 
   getSelectedText = async () => {

@@ -10,6 +10,7 @@ export interface IEditorPorps {
     value?: string;
     readOnly?: boolean;
     onChange?: (val: string) => void;
+    onReady?: (editor: any) => void;
     getShortcuts?: () => IShortcut[];
     fullscreenLabels?: string[];
 }
