@@ -17,7 +17,7 @@ function middleware(options) {
     const { jsonpCallbackName, onReady, errorStack } = options;
     const processor = new yamlql_1.Processor(options.processor);
     //序列化
-    function stringify(data, jsonpCallback) {
+    function wrapResult(data, jsonpCallback) {
         const text = JSON.stringify(data);
         return jsonpCallback ? `${jsonpCallback}(${text})` : text;
     }
@@ -25,11 +25,11 @@ function middleware(options) {
     function process(client, data, next, jsonpCallback) {
         client.res.setHeader('Content-Type', 'application/json');
         return processor.process(Object.assign({}, data, { client })).then(result => {
-            client.res.send(stringify(result, jsonpCallback));
+            client.res.send(wrapResult(result, jsonpCallback));
             next();
         }).catch(err => {
-            client.res.send(stringify(new yamlql_1.YamlQLError(err), jsonpCallback));
-            next(err);
+            client.res.send(wrapResult(new yamlql_1.YamlQLError(err), jsonpCallback));
+            next();
         });
     }
     //内容解析(post)

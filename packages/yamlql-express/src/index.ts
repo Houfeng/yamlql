@@ -46,7 +46,7 @@ export default function middleware(options: IServerOptions): RequestHandler {
       next();
     }).catch(err => {
       client.res.send(wrapResult(new YamlQLError(err), jsonpCallback));
-      next(err);
+      next();
     });
   }
 
