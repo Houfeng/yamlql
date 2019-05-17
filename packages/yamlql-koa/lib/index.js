@@ -23,7 +23,7 @@ function middleware(options) {
         }
         catch (err) {
             ctx.body = wrapResult(new yamlql_1.YamlQLError(err), jsonpCallback);
-            next(err);
+            next();
         }
     }
     //内容解析(post)

@@ -34,7 +34,7 @@ export default function middleware(options: IServerOptions) {
       next();
     } catch (err) {
       ctx.body = wrapResult(new YamlQLError(err), jsonpCallback);
-      next(err);
+      next();
     }
   }
 
